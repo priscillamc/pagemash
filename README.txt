@@ -1,4 +1,4 @@
-=== Contact Form 7 ===
+=== pageMash > pageManagement ===
 Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop,
 Requires at least: 2.2

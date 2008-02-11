@@ -22,7 +22,8 @@ In most cases the plugin should work straight out the box, since most templates 
  `wp_list_pages('depth=1&title_li=);`
 
 However to achieve full functionality including the 'exclude pages' feature you should replace the `wp_list_pages()` function with the following php code:
- `if(function_exists('pageMash_exclude_pages')){$exclude_pages=pageMash_exclude_pages();} else{$exclude_pages='';}`
+ `if(function_exists('pageMash_exclude_pages'))`
+ `{$exclude_pages=pageMash_exclude_pages();} else{$exclude_pages='';}`
  `wp_list_pages('depth=1&title_li=&exclude='.$exclude_pages);`
 
 You can place the code wherever you would like your page listings to appear;

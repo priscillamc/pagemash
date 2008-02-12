@@ -2,14 +2,15 @@
 /*
 Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
-Description: Page Order Management (WP ADMIN > MANAGE > pageMash).
+Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 0.1.0
+Version: 0.1.1
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
 Release:		Date:			Description:
 0.1.0			10 Feb 2008		Initial release
+0.1.1			12 Feb 2008		Minor fixes
 
 */
 #########CONFIG OPTIONS############################################
@@ -69,7 +70,7 @@ function pageMash_main(){
 	
 	<div id="pageMash" class="wrap">
 	<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-	    <?php include("http://www.joelstarnes.co.uk/app_update/?p=pageMash&v=0.1.0"); ?>
+	    version [0.1.1]
 	</div>
 	<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 	<p style="margin-top:4px;">You can use this to organise and manage your pages.</p>

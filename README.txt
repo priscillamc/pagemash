@@ -3,7 +3,7 @@ Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin,
 Requires at least: 2.0
 Tested up to: 2.4-bleeding
-Stable tag: 0.1.0
+Stable tag: 0.1.1
 
 Organise your page order with this simple drag-and-drop Ajax interface.
 
@@ -40,3 +40,7 @@ please drop me an email: joel@joelstarnes.co.uk
 == Localization ==
 
 Currently only available in english.
+
+== Limitations==
+
+The plugin will currently only handle top level pages.

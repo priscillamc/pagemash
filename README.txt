@@ -22,11 +22,12 @@ If you want to see an example of the admin page check out: http://joelstarnes.co
 
 In most cases the plugin should work straight out the box, since most templates will include something similar to: `wp_list_pages('depth=1&title_li=);`
 
-However to achieve full functionality including the 'exclude pages' feature you should replace the `wp_list_pages()` function with the following php code:
+However to achieve full functionality including the 'exclude pages' feature you should replace the wp_list_pages() function with the following php code:
 
  `if(function_exists('pageMash_exclude_pages'))`
  `{$exclude_pages=pageMash_exclude_pages();} else{$exclude_pages='';}`
  `wp_list_pages('depth=1&title_li=&exclude='.$exclude_pages);`
+
 
 You can place the code wherever you would like your page listings to appear;
 usually either the header.php or sidebar.php file found in: `wp-content\themes\theme_name`
@@ -47,3 +48,12 @@ Currently only available in english.
 == Limitations==
 
 The plugin will currently only handle top level pages.
+
+==Change Log==
+
+0.1.0 > Initial Release
+0.1.1 > Removed version check [line72] since some hosts will not allow external includes.
+
+==Road Map==
+
+For the next majour release I hope to support children pages and allow these to be sorted and moved between different parents in a nested list fashion.

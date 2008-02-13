@@ -10,6 +10,7 @@ Organise your page order with this simple drag-and-drop Ajax interface.
 == Description ==
 
 Customise the order your pages are listed in with a simple Ajax drag-and-drop administrative interface with an option to toggle the page visibility. Great tool to quickly re-arrange your menus.
+If you want to see an example of the admin page check out: http://joelstarnes.co.uk/pagemash/example
 
 == Installation ==
 
@@ -21,9 +22,9 @@ Customise the order your pages are listed in with a simple Ajax drag-and-drop ad
 In most cases the plugin should work straight out the box, since most templates will include something similar to: `wp_list_pages('depth=1&title_li=);`
 
 However to achieve full functionality including the 'exclude pages' feature you should replace the `wp_list_pages()` function with the following php code:
- `if(function_exists('pageMash_exclude_pages'))`
- `{$exclude_pages=pageMash_exclude_pages();} else{$exclude_pages='';}`
- `wp_list_pages('depth=1&title_li=&exclude='.$exclude_pages);`
+1. `if(function_exists('pageMash_exclude_pages'))`
+2. `{$exclude_pages=pageMash_exclude_pages();} else{$exclude_pages='';}`
+3. `wp_list_pages('depth=1&title_li=&exclude='.$exclude_pages);`
 
 You can place the code wherever you would like your page listings to appear;
 usually either the header.php or sidebar.php file found in: `wp-content\themes\theme_name`
@@ -35,7 +36,7 @@ please drop me an email: joel@joelstarnes.co.uk
 
 == Screenshots ==
 
-1. Admin Interface
+1. Admin Interface.
 
 == Localization ==
 

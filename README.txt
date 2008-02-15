@@ -36,8 +36,13 @@ usually either the header.php or sidebar.php file found in: `wp-content\themes\t
 == Frequently Asked Questions ==
 
 If you have any questions or comments,
-
 please drop me an email: joel@joelstarnes.co.uk
+
+
+=Can I use this with the 'Pages' sidebar widget?=
+Yes. Go into the wordpress admin; presentation>widgets and drag the pages widget to the sidebar, then go to it's settings by clicking the icon on the right and ensure that 'sort by' value is set to 'page order'.
+
+Note however that the exclude pages feature will not work, so disable this in the top of the pagemash.php file by setting '$excludePagesFeature = false;'.
 
 == Screenshots ==
 

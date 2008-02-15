@@ -39,9 +39,8 @@ If you have any questions or comments,
 please drop me an email: joel@joelstarnes.co.uk
 
 
-=Can I use this with the 'Pages' sidebar widget?=
-Yes. Go into the wordpress admin; presentation>widgets and drag the pages widget to the sidebar, then go to it's settings by clicking the icon on the right and ensure that 'sort by' value is set to 'page order'.
-
+= Can I use this with the 'Pages' sidebar widget? =
+Yes. Go into the wordpress admin; Presentation > Widgets and drag the pages widget to the sidebar, then go to it's settings by clicking the icon on the right and ensure that 'sort by' value is set to 'page order'.
 Note however that the exclude pages feature will not work, so disable this in the top of the pagemash.php file by setting '$excludePagesFeature = false;'.
 
 == Screenshots ==
@@ -59,9 +58,7 @@ The plugin will currently only handle top level pages.
 ==Change Log==
 
 0.1.0 > Initial Release
-
 0.1.1 > Removed version check [line72] since some hosts will not allow external includes.
-
 0.1.2 > Fixed CSS&JS headers to only display on pageMash admin
 
 

@@ -1,5 +1,5 @@
 <?php
-require('./../../../wp-config.php'); //run config to cennect to database
+require('./../../../wp-config.php'); //run config to connect to database
 
 $order = explode(",", $_GET['order']); //cut up the coma delimited page IDs into array
 $position = 1;

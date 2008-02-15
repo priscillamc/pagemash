@@ -70,7 +70,7 @@ function pageMash_main(){
 	
 	<div id="pageMash" class="wrap">
 	<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-	    version [0.1.1]
+	    version [0.1.2]
 	</div>
 	<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 	<p style="margin-top:4px;">You can use this to organise and manage your pages. </p>

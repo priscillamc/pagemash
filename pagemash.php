@@ -10,7 +10,8 @@ Author URI: http://joelstarnes.co.uk/
 CHANGELOG:
 Release:		Date:			Description:
 0.1.0			10 Feb 2008		Initial release
-0.1.1			12 Feb 2008		Minor fixes
+0.1.1			12 Feb 2008		Minor fixes > Removed external include
+0.1.2			15 Feb 2008		Minor fixes > Fixed CSS&JS headers to only display on pagemash 
 
 */
 #########CONFIG OPTIONS############################################
@@ -69,7 +70,7 @@ function pageMash_main(){
 	
 	<div id="pageMash" class="wrap">
 	<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-	    version [0.1.1]
+	    version [0.1.2]
 	</div>
 	<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 	<p style="margin-top:4px;">You can use this to organise and manage your pages. </p>

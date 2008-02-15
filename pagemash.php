@@ -10,7 +10,8 @@ Author URI: http://joelstarnes.co.uk/
 CHANGELOG:
 Release:		Date:			Description:
 0.1.0			10 Feb 2008		Initial release
-0.1.1			12 Feb 2008		Minor fixes
+0.1.1			12 Feb 2008		Minor fixes > Removed external include
+0.1.2			15 Feb 2008		Minor fixes > Fixed CSS&JS headers to only display on pagemash 
 
 */
 #########CONFIG OPTIONS############################################

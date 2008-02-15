@@ -61,9 +61,8 @@ function pageMash_main(){
 		$pageposts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_status = 'static' AND post_parent = '0' ORDER BY menu_order");
 	}
 
-	//get pages-to-hide from database
-	$excludePagesObj = $wpdb->get_results("SELECT option_value FROM $wpdb->options WHERE option_name = 'exclude_pages'");
-	$excludePagesList = '>, '.$excludePagesObj[0]->option_value; 
+	//get pages-to-hide from option function
+	$excludePagesList = '>, '.get_option('exclude_pages'); 
 		//precede with '>, ' otherwise the first pageid will return 0 when strpos() is called to find it.
 		//the initial coma allows us to search for ', $pageid,' so as to avoid partial matches
 	?>
@@ -73,14 +72,14 @@ function pageMash_main(){
 	    version [0.1.1]
 	</div>
 	<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
-	<p style="margin-top:4px;">You can use this to organise and manage your pages.</p>
+	<p style="margin-top:4px;">You can use this to organise and manage your pages. </p>
 
 	<ul id="pageMash_pages" style="list-style:none;">
 
 	<?php foreach ($pageposts as $page): //list pages ?>
 		<li id="<?=$page->ID;?>" <?php if(strpos($excludePagesList, ', '.$page->ID.',')){echo 'class="remove"';}//if page is in exclude list, add class remove ?>>
 			<strong><?=$page->post_title;?></strong>
-			[<a href="<?=get_settings('siteurl').'/wp-admin/post.php?action=edit&post='.$page->ID; ?>" title="Edit This Page">edit</a>]
+			[<a href="<?=get_option('siteurl').'/wp-admin/post.php?action=edit&post='.$page->ID; ?>" title="Edit This Page">edit</a>]
 		</li>
 	<?php endforeach; ?>
 
@@ -105,7 +104,7 @@ function pageMash_main(){
 			<small><strong>Note:</strong> This plugin only orders top level pages</small>
 		</p>
 		<p style="margin-bottom:1px;">To use this plugin you need to use the <strong>wp_list_pages()</strong> function with the parameters as shown below:</p>
-		<code>
+		<code id="pageMash_code">
 <span class="white">&lt;?php</span> <span class="purple">if(</span><span class="blue">function_exists(</span><span class="orange">'pageMash_exclude_pages'</span><span class="blue">)</span><span class="purple">){</span><span class="yellow">$exclude_pages</span><span class="white">=</span><span class="blue">pageMash_exclude_pages();</span><span class="purple">} else{</span><span class="yellow">$exclude_pages</span><span class="white">=</span><span class="orange">''</span><span class="blue">;</span><span class="purple">}</span><span class="white">?&gt;</span><br />
 <span class="white">&lt;?php</span> <span class="blue">wp_list_pages(</span><span class="orange">'depth=1&amp;title_li=&amp;exclude='</span><span class="green">.</span><span class="yellow">$exclude_pages</span><span class="blue">);</span><span class="white">?&gt;</span>
 		</code>
@@ -114,7 +113,10 @@ function pageMash_main(){
 	<?php
 }
 
+
+
 function pageMash_head(){
+if(strrpos('>'.$_GET["page"], 'pagemash')){ // only include header stuff on pagemash admin page
 	//stylesheet & javascript to go in page header
 	global $instantUpdateFeature, $excludePagesFeature;
 	?>
@@ -126,15 +128,15 @@ function pageMash_head(){
 	ul#pageMash_pages li.remove a { color:grey; }
 	ul#pageMash_pages li.remove img { opacity:0.2; }
 	
-	code {display:block; border:solid 3px #858EF4; background-color:#211E1E; padding:7px; margin=10px;}
-	code .white{color:#DADADA;}
-	code .purple{color:#9B2E4D; font-weight:bold;}
-	code .green{color:#00FF00;}
-	code .blue{color:#858EF4;}
-	code .yellow{color:#C1C144;}
-	code .orange{color:#EC9E00;}
+	#pageMash_code {display:block; border:solid 3px #858EF4; background-color:#211E1E; padding:7px; margin=10px;}
+	#pageMash_code .white{color:#DADADA;}
+	#pageMash_code .purple{color:#9B2E4D; font-weight:bold;}
+	#pageMash_code .green{color:#00FF00;}
+	#pageMash_code .blue{color:#858EF4;}
+	#pageMash_code .yellow{color:#C1C144;}
+	#pageMash_code .orange{color:#EC9E00;}
 </style>
-<script type="text/javascript" src="<?=get_settings('siteurl')?>/wp-content/plugins/pagemash/mootools-1.11.js"></script>
+<script type="text/javascript" src="<?=get_option('siteurl')?>/wp-content/plugins/pagemash/mootools-1.11.js"></script>
 <script type="text/javascript">
 
 /* Moo extenders */
@@ -241,7 +243,7 @@ function updateOrder (serial) {
 		});
 	<?php endif; ?>
 
-	new Ajax('<?=get_settings('siteurl')?>/wp-content/plugins/pagemash/reorder.php?order='+serial+'&exclude='+excludePages, {
+	new Ajax('<?=get_option('siteurl')?>/wp-content/plugins/pagemash/reorder.php?order='+serial+'&exclude='+excludePages, {
 		method: 'get',
 		onComplete: function() {
 			$('update_status').setText('Database Updated');
@@ -258,7 +260,7 @@ function updateOrder (serial) {
 }
 <?php if($excludePagesFeature): ?>
 	var DeleteButton = function(el) {
-		new Element('img').setProperties({src: '<?=get_settings("siteurl")?>/wp-content/plugins/pagemash/hide.png', alt: 'show|hide'}).addEvent('click', toggleRemove).injectTop(el);
+		new Element('img').setProperties({src: '<?=get_option("siteurl")?>/wp-content/plugins/pagemash/hide.png', alt: 'show|hide'}).addEvent('click', toggleRemove).injectTop(el);
 	}
 	var toggleRemove = function() {
 		this.parentNode.toggleClass('remove');
@@ -266,7 +268,8 @@ function updateOrder (serial) {
 <?php endif; ?>
 </script>
 	<?php
-}
+} //end main if
+} //end function
 
 
 function pageMash_add_pages(){

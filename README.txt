@@ -47,6 +47,8 @@ Note however that the exclude pages feature will not work, so disable this in th
 
 1. Admin Interface.
 
+2. If you are having problems using the pages widget; goto [Admin > Presentation > Widgets] and check that the 'sort by' value is set to 'page order'.
+
 == Localization ==
 
 Currently only available in english.
@@ -58,7 +60,9 @@ The plugin will currently only handle top level pages.
 ==Change Log==
 
 0.1.0 > Initial Release
+
 0.1.1 > Removed version check [line72] since some hosts will not allow external includes.
+
 0.1.2 > Fixed CSS&JS headers to only display on pageMash admin
 
 

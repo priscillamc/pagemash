@@ -3,7 +3,7 @@ Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin,
 Requires at least: 2.0
 Tested up to: 2.4-bleeding
-Stable tag: 0.1.2
+Stable tag: 0.1.3
 
 Organise your page order with this simple drag-and-drop Ajax interface.
 
@@ -20,14 +20,14 @@ If you want to see an example of the admin page check out: http://joelstarnes.co
 1. Activate in 'Plugins' admin menu
 1. {Edit your Template}
 
-In most cases the plugin should work straight out the box, since most templates will include something similar to: `wp_list_pages('depth=1&title_li=);`
+In most cases the plugin should work straight out the box, since most templates will include something similar to: `wp_list_pages('title_li=<h2>Pages</h2>);`
 
 
 However to achieve full functionality including the 'exclude pages' feature you should replace the wp_list_pages() function with the following php code:
 
  `if(function_exists('pageMash_exclude_pages'))`
  `{$exclude_pages=pageMash_exclude_pages();} else{$exclude_pages='';}`
- `wp_list_pages('depth=1&title_li=&exclude='.$exclude_pages);`
+ `wp_list_pages('title_li=<h2>Pages</h2>&exclude='.$exclude_pages);`
 
 
 You can place the code wherever you would like your page listings to appear;
@@ -64,6 +64,8 @@ The plugin will currently only handle top level pages.
 0.1.1 > Removed version check [line72] since some hosts will not allow external includes.
 
 0.1.2 > Fixed CSS&JS headers to only display on pageMash admin
+
+0.1.3 > Fixed exclude pages feature
 
 
 ==Road Map==

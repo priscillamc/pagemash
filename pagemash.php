@@ -4,14 +4,15 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 0.1.2
+Version: 0.1.3
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
 Release:		Date:			Description:
 0.1.0			10 Feb 2008		Initial release
-0.1.1			12 Feb 2008		Minor fixes > Removed external include
-0.1.2			15 Feb 2008		Minor fixes > Fixed CSS&JS headers to only display on pagemash 
+0.1.1			12 Feb 2008		Fixed Removed external include
+0.1.2			15 Feb 2008		Fixed CSS&JS headers to only display on pagemash 
+0.1.3			19 Feb 2008		Fixed exclude pages feature
 
 */
 #########CONFIG OPTIONS############################################
@@ -61,16 +62,25 @@ function pageMash_main(){
 	}else{
 		$pageposts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_status = 'static' AND post_parent = '0' ORDER BY menu_order");
 	}
-
-	//get pages-to-hide from option function
-	$excludePagesList = '>, '.get_option('exclude_pages'); 
-		//precede with '>, ' otherwise the first pageid will return 0 when strpos() is called to find it.
-		//the initial coma allows us to search for ', $pageid,' so as to avoid partial matches
+	
+	//get pages set to exclude
+	$excludePagesList = get_option('exclude_pages');
+	switch($excludePagesList) {
+		case null:
+			//adds exclude_pages row to options DB. @FIXME runs when the value exists but equals ''
+			add_option("exclude_pages", '', 'Pages to not show in menu.', 'yes');
+		break;
+		default:
+			//precede with '>,' otherwise the first pageid will return 0 when strpos() is called to find it.
+			//the initial coma allows us to search for ',$pageid,' so as to avoid partial matches
+			$excludePagesList = '>,'.$excludePagesList;
+		break;
+	}
 	?>
 	
 	<div id="pageMash" class="wrap">
 	<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-	    version [0.1.2]
+	    version [0.1.3]
 	</div>
 	<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 	<p style="margin-top:4px;">You can use this to organise and manage your pages. </p>
@@ -78,7 +88,7 @@ function pageMash_main(){
 	<ul id="pageMash_pages" style="list-style:none;">
 
 	<?php foreach ($pageposts as $page): //list pages ?>
-		<li id="<?=$page->ID;?>" <?php if(strpos($excludePagesList, ', '.$page->ID.',')){echo 'class="remove"';}//if page is in exclude list, add class remove ?>>
+		<li id="<?=$page->ID;?>" <?php if(strpos($excludePagesList, ','.$page->ID.',')){echo 'class="remove"';}//if page is in exclude list, add class remove ?>>
 			<strong><?=$page->post_title;?></strong>
 			[<a href="<?=get_option('siteurl').'/wp-admin/post.php?action=edit&post='.$page->ID; ?>" title="Edit This Page">edit</a>]
 		</li>
@@ -107,7 +117,7 @@ function pageMash_main(){
 		<p style="margin-bottom:1px;">To use this plugin you need to use the <strong>wp_list_pages()</strong> function with the parameters as shown below:</p>
 		<code id="pageMash_code">
 <span class="white">&lt;?php</span> <span class="purple">if(</span><span class="blue">function_exists(</span><span class="orange">'pageMash_exclude_pages'</span><span class="blue">)</span><span class="purple">){</span><span class="yellow">$exclude_pages</span><span class="white">=</span><span class="blue">pageMash_exclude_pages();</span><span class="purple">} else{</span><span class="yellow">$exclude_pages</span><span class="white">=</span><span class="orange">''</span><span class="blue">;</span><span class="purple">}</span><span class="white">?&gt;</span><br />
-<span class="white">&lt;?php</span> <span class="blue">wp_list_pages(</span><span class="orange">'depth=1&amp;title_li=&amp;exclude='</span><span class="green">.</span><span class="yellow">$exclude_pages</span><span class="blue">);</span><span class="white">?&gt;</span>
+<span class="white">&lt;?php</span> <span class="blue">wp_list_pages(</span><span class="orange">'title_li=&lt;h2&gt;Pages&lt;/h2&gt;&amp;exclude='</span><span class="green">.</span><span class="yellow">$exclude_pages</span><span class="blue">);</span><span class="white">?&gt;</span>
 		</code>
 		<p>For more information on the wp_list_pages() function checkout the <a href="http://codex.wordpress.org/Template_Tags/wp_list_pages" title="wp_list_pages Documentation">Wordpress Codex</a> and if you have any further questions, just <a href="http://joelstarnes.co.uk/contact/" title="email Joel Starnes">drop me an email</a>.</p>
 	</div>
@@ -240,7 +250,7 @@ function updateOrder (serial) {
 	<?php if($excludePagesFeature): ?>
 		var excludePages = "";
 		$$('#pageMash_pages li.remove').each(function(el){
-			excludePages += el.getProperty('id') + ', ';
+			excludePages += el.getProperty('id') + ',';
 		});
 	<?php endif; ?>
 

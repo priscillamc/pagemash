@@ -233,7 +233,7 @@ window.addEvent('domready', function(){
 	<?php if($excludePagesFeature): ?>
 		$ES('li','pageMash_pages').each(function(el) { DeleteButton(el); })
 	<?php endif; ?>
-});
+}); /* close dom ready */
 
 
 function updateOrder (serial) {

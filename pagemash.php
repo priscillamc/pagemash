@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 0.1.1
+Version: 0.1.2
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
@@ -233,7 +233,7 @@ window.addEvent('domready', function(){
 	<?php if($excludePagesFeature): ?>
 		$ES('li','pageMash_pages').each(function(el) { DeleteButton(el); })
 	<?php endif; ?>
-});
+}); /* close dom ready */
 
 
 function updateOrder (serial) {

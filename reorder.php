@@ -9,7 +9,7 @@ foreach ($order as $pageid):
 	$position += 1; //increment position var
 endforeach;
 
-update_option("exclude_pages", $value = $_GET['exclude'];, $description = 'PageMash: Pages to not show in menu.', $autoload = 'yes');
+update_option("exclude_pages", $_GET['exclude'], '', 'yes');
 
 echo "pagemashed";
 ?>

@@ -9,9 +9,7 @@ foreach ($order as $pageid):
 	$position += 1; //increment position var
 endforeach;
 
-$exclude = $_GET['exclude']; 
-$postquery = "UPDATE $wpdb->options SET option_value='$exclude' WHERE option_name='exclude_pages'"; //setup db query
-$wpdb->query($postquery); //update pages in db
+update_option("exclude_pages", $value = $_GET['exclude'];, $description = 'PageMash: Pages to not show in menu.', $autoload = 'yes');
 
 echo "pagemashed";
 ?>

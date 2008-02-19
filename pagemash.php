@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 0.1.3
+Version: 0.1.2
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
@@ -64,18 +64,9 @@ function pageMash_main(){
 	}
 	
 	//get pages set to exclude
-	$excludePagesList = get_option('exclude_pages');
-	switch($excludePagesList) {
-		case null:
-			//adds exclude_pages row to options DB. @FIXME runs when the value exists but equals ''
-			add_option("exclude_pages", '', 'Pages to not show in menu.', 'yes');
-		break;
-		default:
-			//precede with '>,' otherwise the first pageid will return 0 when strpos() is called to find it.
-			//the initial coma allows us to search for ',$pageid,' so as to avoid partial matches
-			$excludePagesList = '>,'.$excludePagesList;
-		break;
-	}
+	$excludePagesList = '>,'.get_option('exclude_pages');
+	//precede with '>,' otherwise the first pageid will return 0 when strpos() is called to find it.
+	//the initial coma allows us to search for ',$pageid,' so as to avoid partial matches
 	?>
 	
 	<div id="pageMash" class="wrap">

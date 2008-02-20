@@ -89,7 +89,7 @@ function pageMash_getPages($post_parent){
 					id:<?=$page->ID;?>
 					[<a href="<?=get_settings('siteurl').'/wp-admin/post.php?action=edit&post='.$page->ID; ?>" title="Edit This Page">edit</a>]
 					<?php if($excludePagesFeature): ?>
-						[<a href="#" title="Show|Hide" class="excludeLink" onclick="toggleRemove(this);">hide</a>]
+						[<a href="#" title="Show|Hide" class="excludeLink" onclick="toggleRemove(this); return false">hide</a>]
 					<?php endif; ?>
 				</span>
 				<?php pageMash_getPages($page->ID)  //call this function to list any sub-pages (passing it the pageID) ?>

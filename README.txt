@@ -13,6 +13,17 @@ Customise the order your pages are listed in with a simple Ajax drag-and-drop ad
 
 If you want to see an example of the admin page check out: http://joelstarnes.co.uk/pagemash/example
 
+
+
+= Development Version 1.0.0 beta =
+
+I have just finished a major rebuild of the plugin to give full recursive suppot for unlimited nested children in a collapsable list which I've decided to release in beta as version 1.0.0. so give it a download from the link below and any feedback would be a great help http://joelstarnes.co.uk/contact
+
+http://joelstarnes.co.uk/pagemash/example_v1.0.0
+
+http://joelstarnes.co.uk/downloads/pagemash1.0.0.zip
+
+
 == Installation ==
 
 1. Download Plugin
@@ -36,7 +47,7 @@ usually either the header.php or sidebar.php file found in: `wp-content\themes\t
 == Frequently Asked Questions ==
 
 If you have any questions or comments,
-please drop me an email: joel@joelstarnes.co.uk
+please drop me an email: pagemash@joelstarnes.co.uk
 
 
 = Can I use this with the 'Pages' sidebar widget? =

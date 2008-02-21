@@ -89,7 +89,7 @@ function pageMash_getPages($post_parent){
 					id:<?=$page->ID;?>
 					[<a href="<?=get_settings('siteurl').'/wp-admin/post.php?action=edit&post='.$page->ID; ?>" title="Edit This Page">edit</a>]
 					<?php if($excludePagesFeature): ?>
-						[<a href="#" title="Show|Hide" class="excludeLink" onclick="toggleRemove(this);">hide</a>]
+						[<a href="#" title="Show|Hide" class="excludeLink" onclick="toggleRemove(this); return false">hide</a>]
 					<?php endif; ?>
 				</span>
 				<?php pageMash_getPages($page->ID)  //call this function to list any sub-pages (passing it the pageID) ?>
@@ -138,10 +138,10 @@ function pageMash_main(){
 	<div class="wrap" style="width:160px; margin-bottom:0; padding:2px; text-align:center;"><a href="#" id="pageMashInfo_toggle" style="text-align:center;">Show|Hide Further Info</a></div>
 	<div class="wrap" id="pageMashInfo" style="margin-top:-1px;">
 		<h2>How to Install</h2>
-		<p style="font-size:1.1em;">In most cases, to use this plugin you will not need to change anything, however if its not working you will either need to:</p>
-		<ol>
+		<p style="font-size:1.1em;">In most cases, to use this plugin you will not need to change anything, however if its not working you will need to either:</p>
+		<ol style="list-style-type:upper-alpha;">
 		    <li>Check your 'pages' widget in the WP admin panel under the Presentation>Widgets tab and click the little icon on the pages widget and ensure that <strong>sort by</strong> is set to <strong>'page order'</strong>. </li>
-		    <li>If you want the pages listed else-where or do not use the widgets or want you would like to use the excludePagesFeature, then you need to edit your template as shown below:
+		    <li>If you want the pages listed else-where or do not use the widgets or you would like to use the excludePagesFeature, then you need to edit your template:
 		    	<ol style="list-style-type:upper-roman;">
 		    	    <li style="margin-bottom:0;">To use the code in your sidebar.php file you need to remove all widgets in your WP admin to active the sidebar code and then find the <strong>wp_list_pages()</strong> function and change it to the code below </li>
 		    	    <li style="margin-bottom:0;">To insert the pages in your header; modify header.php insert the code anywhere inside the body tag. (You may want to add the depth=1 parameter on the 2nd line if you only want top level pages listed)</li>

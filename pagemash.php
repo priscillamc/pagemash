@@ -15,15 +15,9 @@ Release:		Date:			Description:
 1.0.0 beta		19 Feb 2008		Major update > 	Recusive page handles unlimited nested children,
 												collapsable list items, interface makeover...
 
-TODO:
-	@todo optimize for instantUpdateFeature
-	@todo update moo code?
-	@todo default exclude pages off / write toggle option?
-	@todo svn branch?
-	@todo release in beta
-		
 FIXME:
-	@fixme with instantUpdateFeature hide will not send the update
+	@fixme with instantUpdateFeature, hide will not send the update
+	@fixme ie highlights text as you drag the list item
 	
 */
 #########CONFIG OPTIONS############################################

@@ -17,11 +17,11 @@ If you want to see an example of the admin page check out: http://joelstarnes.co
 
 = Development Version 1.0.0 beta =
 
-I have just finished a major rebuild of the plugin to give full recursive suppot for unlimited nested children in a collapsable list which I've decided to release in beta as version 1.0.0. so give it a download from the link below and any feedback would be a great help http://joelstarnes.co.uk/contact
+I have just finished a major rebuild of the plugin to give full recursive suppot for unlimited nested children in a collapsable list which I've decided to release in beta as version 1.0.0. so give it a download from the link below and if you notice any bugs or if you find it all works just dandy drop me a quick message: http://joelstarnes.co.uk/contact
 
 http://joelstarnes.co.uk/pagemash/example_v1.0.0
 
-http://joelstarnes.co.uk/downloads/pagemash1.0.0.zip
+http://downloads.wordpress.org/plugin/pagemash.1.0.0.zip
 
 
 == Installation ==

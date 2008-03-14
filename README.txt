@@ -15,13 +15,13 @@ If you want to see an example of the admin page check out: http://joelstarnes.co
 
 
 
-= Development Version 1.0.0 beta =
+= Development Version 1.0.1 beta =
 
-I have just finished a major rebuild of the plugin to give full recursive suppot for unlimited nested children in a collapsable list which I've decided to release in beta as version 1.0.0. so give it a download from the link below and if you notice any bugs or if you find it all works just dandy drop me a quick message: http://joelstarnes.co.uk/contact
+Version 1.0.0 major rebuild of the plugin gives full recursive suppot for unlimited nested children in a collapsable list. [version 1.0.1 fixes a text-select bug in IE]. Give the beta app a download from the link below and if you have any feedback drop me a mail, [even if it works all fine and dandy its nice to know :D] http://joelstarnes.co.uk/contact
 
-http://joelstarnes.co.uk/pagemash/example_v1.0.0
+http://joelstarnes.co.uk/pagemash/example_v1.0.1
 
-http://downloads.wordpress.org/plugin/pagemash.1.0.0.zip
+http://downloads.wordpress.org/plugin/pagemash.zip
 
 
 == Installation ==
@@ -47,12 +47,12 @@ usually either the header.php or sidebar.php file found in: `wp-content\themes\t
 == Frequently Asked Questions ==
 
 If you have any questions or comments,
-please drop me an email: pagemash@joelstarnes.co.uk
-
+please drop me an email: joel@joelstarnes.co.uk
 
 = Can I use this with the 'Pages' sidebar widget? =
 Yes. Go into the wordpress admin; Presentation > Widgets and drag the pages widget to the sidebar, then go to it's settings by clicking the icon on the right and ensure that 'sort by' value is set to 'page order'.
 Note however that the exclude pages feature will not work, so disable this in the top of the pagemash.php file by setting '$excludePagesFeature = false;'.
+
 
 == Screenshots ==
 
@@ -60,13 +60,6 @@ Note however that the exclude pages feature will not work, so disable this in th
 
 2. If you are having problems using the pages widget; goto [Admin > Presentation > Widgets] and check that the 'sort by' value is set to 'page order'.
 
-== Localization ==
-
-Currently only available in english.
-
-== Limitations==
-
-The plugin will currently only handle top level pages.
 
 ==Change Log==
 
@@ -76,9 +69,10 @@ The plugin will currently only handle top level pages.
 
 0.1.2 > Fixed CSS&JS headers to only display on pageMash admin
 
-0.1.3 > Fixed exclude pages feature
+0.1.3 > Fixed exclude pages feature \n
+1.0.0 beta > Major rebuild > Recusive page handles unlimited nested children, collapsable list items, interface makeover...
 
 
-==Road Map==
+== Localization ==
 
-For the next majour release I hope to support children pages and allow these to be sorted and moved between different parents in a nested list fashion.
+Currently only available in english.

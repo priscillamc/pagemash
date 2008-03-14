@@ -354,13 +354,14 @@ window.addEvent('domready', function(){
 	});
 
 	//disable drag text-selection
-	if (typeof target.style.MozUserSelect!="undefined")
-		document.body.style.MozUserSelect="none"; //for Mozilla
-	else if (typeof target.onselectstart!="undefined")
-		document.body.onselectstart=function(){return false} //for IE
-	else 
-		document.body.onmousedown=function(){return false} //for safari, opera, etc
-	}
+	var target = document.body;
+	if (typeof target.onselectstart!="undefined") //for IE
+		target.onselectstart=function(){return false}
+	else if (typeof target.style.MozUserSelect!="undefined") //for mozilla
+		target.style.MozUserSelect="none"
+	else //for safari, opera, etc
+		target.onmousedown=function(){return false}
+
 
 }); /* close dom ready */
 </script>

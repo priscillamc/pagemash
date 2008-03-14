@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 1.0.0
+Version: 1.0.1
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
@@ -14,14 +14,8 @@ Release:		Date:			Description:
 0.1.2			15 Feb 2008		Minor fixes > Fixed CSS&JS headers to only display on pagemash 
 1.0.0 beta		19 Feb 2008		Major update > 	Recusive page handles unlimited nested children,
 												collapsable list items, interface makeover...
+1.0.1 beta		14 Mar 2008		fixed IE > drag selects text
 
-TODO:
-	@todo optimize for instantUpdateFeature
-	@todo update moo code?
-	@todo default exclude pages off / write toggle option?
-	@todo svn branch?
-	@todo release in beta
-		
 FIXME:
 	@fixme with instantUpdateFeature hide will not send the update
 	
@@ -191,6 +185,9 @@ if(strrpos('>'.$_GET["page"], 'pagemash')): // only include header stuff on page
 	ul#pageMash_pages li.collapsed.children span.title {
 		text-decoration: underline;
 	}
+	ul#pageMash_pages li.collapsed.children li span.title {
+		text-decoration: none;
+	}
 	#update_status { 
 		font-weight:bold; 
 		display:block; 
@@ -217,6 +214,8 @@ if(strrpos('>'.$_GET["page"], 'pagemash')): // only include header stuff on page
 	ul#pageMash_pages li:hover li:hover li:hover li:hover span.pageMash_pageFunctions { display:inline; }
 	ul#pageMash_pages li:hover li:hover li:hover li:hover li span.pageMash_pageFunctions { display:none; }
 	ul#pageMash_pages li:hover li:hover li:hover li:hover li:hover span.pageMash_pageFunctions { display:inline; }
+	ul#pageMash_pages li:hover li:hover li:hover li:hover li:hover li span.pageMash_pageFunctions { display:none; }
+	ul#pageMash_pages li:hover li:hover li:hover li:hover li:hover li:hover span.pageMash_pageFunctions { display:inline; }
 	
 	code {display:block; border:solid 3px #858EF4; background-color:#211E1E; padding:7px; margin:0px;}
 	code .white{color:#DADADA;}
@@ -353,7 +352,16 @@ window.addEvent('domready', function(){
 			e.stop();
 		});
 	});
-	
+
+	//disable drag text-selection
+	if (typeof target.style.MozUserSelect!="undefined")
+		document.body.style.MozUserSelect="none"; //for Mozilla
+	else if (typeof target.onselectstart!="undefined")
+		document.body.onselectstart=function(){return false} //for IE
+	else 
+		document.body.onmousedown=function(){return false} //for safari, opera, etc
+	}
+
 }); /* close dom ready */
 </script>
 	<?php

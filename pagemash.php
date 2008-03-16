@@ -24,7 +24,7 @@ FIXME:
 $minlevel = 7;  /*[deafult=7]*/
 /* Minimum user level to access page order */
 
-$excludePagesFeature = false;  /*[deafult=true]*/
+$excludePagesFeature = true;  /*[deafult=true]*/
 /* Allows you to set pages not to be listed
    Will only work if you have modified the template. */
 

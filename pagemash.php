@@ -108,7 +108,7 @@ function pageMash_main(){
 	<div id="debug_list"></div>
 	<div id="pageMash" class="wrap">
 	<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-	    version [1.0.0 beta]
+	    version [1.0.1 beta]
 	</div>
 	<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 	<p style="margin-top:4px;">

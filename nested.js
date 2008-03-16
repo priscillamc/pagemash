@@ -229,7 +229,7 @@ var Nested = new Class({
 		var kids;
 		if (!listEl) listEl = this.list;
 		$$(listEl.childNodes).each(function(node, i) {
-			kids = $E(this.options.parentTag, node);
+			kids = $E('ul', node); /* set 'this.options.parentTag' straight to 'ul' to avoid safari bug */
 			serial[i] = {
 				id: node.id,
 				hide: (node.hasClass('remove')) ? 'exclude' : "",

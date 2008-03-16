@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 1.0.1
+Version: 1.0.2
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
@@ -15,6 +15,7 @@ Release:		Date:			Description:
 1.0.0 beta		19 Feb 2008		Major update > 	Recusive page handles unlimited nested children,
 												collapsable list items, interface makeover...
 1.0.1 beta		14 Mar 2008		fixed IE > drag selects text
+1.0.2			16 Mar 2008		Major code rewrite for exclude pages
 
 FIXME:
 	@fixme with instantUpdateFeature hide will not send the update
@@ -25,8 +26,7 @@ $minlevel = 7;  /*[deafult=7]*/
 /* Minimum user level to access page order */
 
 $excludePagesFeature = true;  /*[deafult=true]*/
-/* Allows you to set pages not to be listed
-   Will only work if you have modified the template. */
+/* Allows you to set pages not to be listed */
 
 $instantUpdateFeature = false;  /*[deafult=false]*/
 /* Updates the database instantly after a move using ajax 
@@ -36,11 +36,12 @@ $instantUpdateFeature = false;  /*[deafult=false]*/
 
 ###################################################################
 /*
-CREDITS:
+INSPIRATIONS/CREDITS:
 Valerio Proietti - Mootools JS Framework [http://mootools.net/]
 Stefan Lange-Hegermann - Mootools AJAX timeout class extension [http://www.blackmac.de/archives/44-Mootools-AJAX-timeout.html]
 vladimir - Mootools Sortables class extension [http://vladimir.akilles.cl/scripts/sortables/]
 ShiftThis - WP Page Order Plugin [http://www.shiftthis.net/wordpress-order-pages-plugin/]
+Garrett Murphey - Page Link Manager [http://gmurphey.com/2006/10/05/wordpress-plugin-page-link-manager/]
 */
 
 /*  Copyright 2008  Joel Starnes  (email : joel@joelstarnes.co.uk)
@@ -64,7 +65,7 @@ ShiftThis - WP Page Order Plugin [http://www.shiftthis.net/wordpress-order-pages
 function pageMash_getPages($post_parent){
 	//this is a recurrsive function which calls itself to produce a nested list of elements
 	//$post_parent should be 0 for root pages, or contain a pageID to return it's sub-pages
-	global $wpdb, $wp_version, $instantUpdateFeature, $excludePagesFeature, $excludePagesList;
+	global $wpdb, $wp_version, $excludePagesFeature;
 	if($wp_version >= 2.1){ //get pages from database
 		$pageposts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_type = 'page' AND post_parent = '$post_parent' ORDER BY menu_order");
 	}else{
@@ -74,10 +75,10 @@ function pageMash_getPages($post_parent){
 	if ($pageposts == true){ //if $pageposts == true then it does have sub-page(s), so list them.
 		echo '<ul ';
 		if($post_parent==0) echo 'id="pageMash_pages" '; //add this ID only to root 'ul' element
-		echo 'style="list-style:none;">';
+		echo '>';
    
 		foreach ($pageposts as $page): //list pages, [the 'li' ID must be the page ID] ?>
-			<li id="pm_<?=$page->ID;?>" <?php if(strpos($excludePagesList, ','.$page->ID.',')){echo 'class="remove"';}//if page is in exclude list, add class remove ?>>
+			<li id="pm_<?=$page->ID;?>" <?php if(in_array($page->ID, get_option('exclude_pages'))) echo 'class="remove"';//if page is in exclude list, add class remove ?>>
 				<span class="title"><?=$page->post_title;?></span>
 				<span class="pageMash_pageFunctions">
 					id:<?=$page->ID;?>
@@ -97,18 +98,12 @@ function pageMash_getPages($post_parent){
 }
 
 function pageMash_main(){
-	global $wpdb, $wp_version, $instantUpdateFeature, $excludePagesFeature, $excludePagesList;
-
-	//get pages-to-hide from database
-	$excludePagesObj = $wpdb->get_results("SELECT option_value FROM $wpdb->options WHERE option_name = 'exclude_pages'");
-	$excludePagesList = '>,'.$excludePagesObj[0]->option_value; 
-		//precede with '>,' otherwise the first pageid will return 0 when strpos() is called to find it.
-		//the initial coma allows us to search for ',$pageid,' so as to avoid partial matches
+	global $instantUpdateFeature, $excludePagesFeature;
 	?>
 	<div id="debug_list"></div>
 	<div id="pageMash" class="wrap">
 	<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-	    version [1.0.1 beta]
+	    version [1.0.2]
 	</div>
 	<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 	<p style="margin-top:4px;">
@@ -131,24 +126,15 @@ function pageMash_main(){
 
 	<div class="wrap" style="width:160px; margin-bottom:0; padding:2px; text-align:center;"><a href="#" id="pageMashInfo_toggle" style="text-align:center;">Show|Hide Further Info</a></div>
 	<div class="wrap" id="pageMashInfo" style="margin-top:-1px;">
-		<h2>How to Install</h2>
-		<p style="font-size:1.1em;">In most cases, to use this plugin you will not need to change anything, however if its not working you will need to either:</p>
-		<ol style="list-style-type:upper-alpha;">
-		    <li>Check your 'pages' widget in the WP admin panel under the Presentation>Widgets tab and click the little icon on the pages widget and ensure that <strong>sort by</strong> is set to <strong>'page order'</strong>. </li>
-		    <li>If you want the pages listed else-where or do not use the widgets or you would like to use the excludePagesFeature, then you need to edit your template:
-		    	<ol style="list-style-type:upper-roman;">
-		    	    <li style="margin-bottom:0;">To use the code in your sidebar.php file you need to remove all widgets in your WP admin to active the sidebar code and then find the <strong>wp_list_pages()</strong> function and change it to the code below </li>
-		    	    <li style="margin-bottom:0;">To insert the pages in your header; modify header.php insert the code anywhere inside the body tag. (You may want to add the depth=1 parameter on the 2nd line if you only want top level pages listed)</li>
-		    	</ol>
-		    Then to enable the excludePagesFeature find the line $excludePagesFeature = false; near the top of pagemash.php and change the value to true.
-		    </li>
-		</ol>
+		<h2>How to Use</h2>
+		<p>pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar [WP admin page > Presentation > Widgets]. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.</p>
+		<p>You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you're using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top levle pages). The code should look something like the following:</p>
 		<p style="margin-bottom:0; font-weight:bold;">Code:</p>
-		<code>
-			<span class="white">&lt;?php</span> <span class="purple">if(</span><span class="blue">function_exists(</span><span class="orange">'pageMash_exclude_pages'</span><span class="blue">)</span><span class="purple">){</span><span class="yellow">$exclude_pages</span><span class="white">=</span><span class="blue">pageMash_exclude_pages();</span><span class="purple">} else{</span><span class="yellow">$exclude_pages</span><span class="white">=</span><span class="orange">''</span><span class="blue">;</span><span class="purple">}</span><span class="white">?&gt;</span><br />
-			<span class="white">&lt;?php</span> <span class="blue">wp_list_pages(</span><span class="orange">'title_li=&lt;h2&gt;Pages&lt;/h2&gt;&amp;exclude='</span><span class="green">.</span><span class="yellow">$exclude_pages</span><span class="blue">);</span><span class="white">?&gt;</span>
+		<code id="pageMash_code">
+			<span class="white">&lt;?php</span> <span class="blue">wp_list_pages(</span><span class="orange">'title_li=&lt;h2&gt;Pages&lt;/h2&gt;&amp;depth=0'</span><span class="blue">);</span> <span class="white">?&gt;</span>
 		</code>
-		<p>The plugin code is very simple and flexible, for more information look at the wp_list_pages() function on the <a href="http://codex.wordpress.org/Template_Tags/wp_list_pages" title="wp_list_pages Documentation">Wordpress Codex</a> and if you have any further questions or feedback, just <a href="http://joelstarnes.co.uk/contact/" title="email Joel Starnes">drop me an email</a>.</p>
+		<p>You can also hard-code pages to exclude and these will be merged with the pages you set to exclude in your pageMash admin.</p>
+		<p>The code here is very simple and flexible, for more information look up <a href="http://codex.wordpress.org/Template_Tags/wp_list_pages" title="wp_list_pages Documentation">wp_list_pages() in the Wordpress Codex</a> as it is very well documented and if you have any further questions or feedback I like getting messages, so <a href="http://joelstarnes.co.uk/contact/" title="email Joel Starnes">drop me an email</a>.</p>
 	</div>
 	<?php
 }
@@ -161,10 +147,9 @@ if(strrpos('>'.$_GET["page"], 'pagemash')): // only include header stuff on page
 <style type="text/css">
 	ul#pageMash_pages {
 		margin:0 0 0 0;
+		list-style:none;
 	}
-	ul#pageMash_pages li.collapsed ul {
-		display:none;
-	}
+	ul#pageMash_pages li.collapsed ul {	display:none; }
 	ul#pageMash_pages li.children {
 		background-image: url('<?=get_settings("siteurl")?>/wp-content/plugins/pagemash/collapse.png'); 
 	}
@@ -179,15 +164,9 @@ if(strrpos('>'.$_GET["page"], 'pagemash')): // only include header stuff on page
 		background:#F1F1F1 url('<?=get_settings("siteurl")?>/wp-content/plugins/pagemash/page.png') no-repeat 4px 4px; 
 		list-style-type:none;
 	}
-	ul#pageMash_pages li span.title {
-		font-weight: bold;
-	}
-	ul#pageMash_pages li.collapsed.children span.title {
-		text-decoration: underline;
-	}
-	ul#pageMash_pages li.collapsed.children li span.title {
-		text-decoration: none;
-	}
+	ul#pageMash_pages li span.title { font-weight: bold; }
+	ul#pageMash_pages li.collapsed.children span.title { text-decoration: underline; }
+	ul#pageMash_pages li.collapsed.children li span.title { text-decoration: none; }
 	#update_status { 
 		font-weight:bold; 
 		display:block; 
@@ -195,7 +174,13 @@ if(strrpos('>'.$_GET["page"], 'pagemash')): // only include header stuff on page
 		background-color: #DDA37A;
 		padding: 2px 6px;
 	}
-	ul#pageMash_pages li.remove { color:grey; border-style:dashed; opacity:.5;}
+	ul#pageMash_pages li.remove {
+		color:grey;
+		border-style:dashed; 
+		border-color:#aaa; 
+		opacity:.5; 
+		filter:alpha(opacity=50); zoom:1; /* ie hack[has layout] for opacity */
+	}
 	ul#pageMash_pages li.remove a { color:grey; }
 	ul#pageMash_pages li span.pageMash_pageFunctions {
 		border:1px solid #ccc;
@@ -204,6 +189,7 @@ if(strrpos('>'.$_GET["page"], 'pagemash')): // only include header stuff on page
 	}
 	ul#pageMash_pages li span.pageMash_pageFunctions a { border:0; }
 	
+	/* Show [page id, 'edit page' link and 'hide' link] function box on hover */
 	ul#pageMash_pages li span.pageMash_pageFunctions { display:none; }
 	ul#pageMash_pages li:hover span.pageMash_pageFunctions { display:inline; }
 	ul#pageMash_pages li:hover li span.pageMash_pageFunctions { display:none; }
@@ -217,15 +203,15 @@ if(strrpos('>'.$_GET["page"], 'pagemash')): // only include header stuff on page
 	ul#pageMash_pages li:hover li:hover li:hover li:hover li:hover li span.pageMash_pageFunctions { display:none; }
 	ul#pageMash_pages li:hover li:hover li:hover li:hover li:hover li:hover span.pageMash_pageFunctions { display:inline; }
 	
-	code {display:block; border:solid 3px #858EF4; background-color:#211E1E; padding:7px; margin:0px;}
-	code .white{color:#DADADA;}
-	code .purple{color:#9B2E4D; font-weight:bold;}
-	code .green{color:#00FF00;}
-	code .blue{color:#858EF4;}
-	code .yellow{color:#C1C144;}
-	code .orange{color:#EC9E00;}
+	#pageMash_code {display:block; border:solid 3px #858EF4; background-color:#211E1E; padding:7px; margin:0px;}
+	#pageMash_code .white{color:#DADADA;}
+	#pageMash_code .purple{color:#9B2E4D; font-weight:bold;}
+	#pageMash_code .green{color:#00FF00;}
+	#pageMash_code .blue{color:#858EF4;}
+	#pageMash_code .yellow{color:#C1C144;}
+	#pageMash_code .orange{color:#EC9E00;}
 </style>
-<!-- Current JSON ajax code not compatible with newer releases of moo -->
+<!-- Current code not compatible with newer releases of moo -->
 <script type="text/javascript" src="<?=get_settings('siteurl')?>/wp-content/plugins/pagemash/nest-mootools.v1.11.js"></script>
 <script type="text/javascript" src="<?=get_settings('siteurl')?>/wp-content/plugins/pagemash/nested.js"></script>
 <script type="text/javascript">
@@ -256,14 +242,14 @@ var SaveList = function() {
 	new Ajax('<?=get_settings("siteurl")?>/wp-content/plugins/pagemash/saveList.php', {
 		method: 'post',
 		postBody: 'm='+Json.toString(theDump), 
-		/* update: "debug_list", */
+		// update: "debug_list", 
 		onComplete: function() {
 			$('update_status').setText('Database Updated');
 			new Fx.Style($('update_status'), 'opacity', {duration: 500}).start(0,1).chain(function() {
 				new Fx.Style($('update_status'), 'opacity', {duration: 1500}).start(1,0);
 			});
 		},
-		timeout: 5500, 
+		timeout: 8500, 
 		onTimeout: function() {
 			$('update_status').setText('Error: Update Timeout');
 			new Fx.Style($('update_status'), 'opacity', {duration: 200}).start(0,1);
@@ -353,15 +339,9 @@ window.addEvent('domready', function(){
 		});
 	});
 
-	//disable drag text-selection
-	var target = document.body;
-	if (typeof target.onselectstart!="undefined") //for IE
-		target.onselectstart=function(){return false}
-	else if (typeof target.style.MozUserSelect!="undefined") //for mozilla
-		target.style.MozUserSelect="none"
-	else //for safari, opera, etc
-		target.onmousedown=function(){return false}
-
+	//disable drag text-selection for IE
+	if (typeof document.body.onselectstart!="undefined")
+		document.body.onselectstart=function(){return false}
 
 }); /* close dom ready */
 </script>
@@ -369,22 +349,21 @@ window.addEvent('domready', function(){
 endif; //main function only display head if jmash admin page
 }
 
-
+function pageMash_add_excludes($excludes) {
+	//merge array of hardcoded exclude pages with pageMash ones
+	$excludes = array_merge( get_option('exclude_pages'), $excludes );
+	sort($excludes);
+	return $excludes;
+}
 function pageMash_add_pages(){
 	//add link in the management tab
 	global $minlevel;
 	add_management_page('pageMash page order', 'pageMash', $minlevel, __FILE__, 'pageMash_main');
 }
-function pageMash_exclude_pages(){
-	/* returns coma delimited list of pages to exclude from output
-	   this is used as a parameter in the wp_list_pages() function */
-	global $wpdb;
-	$excludePagesObj = $wpdb->get_results("SELECT option_value FROM $wpdb->options WHERE option_name = 'exclude_pages'");
-	return $excludePagesObj[0]->option_value;
-}
 
 add_action('admin_menu', 'pageMash_add_pages'); //add admin menu under management tab
 add_action('admin_head', 'pageMash_head'); //add css styles and JS code to head
+add_filter('wp_list_pages_excludes', 'pageMash_add_excludes'); //add exclude pages to wp_list_pages funct
 
 
 ?>

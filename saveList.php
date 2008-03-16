@@ -5,7 +5,6 @@ require('myjson.php'); //JSON decode lib
 require('./../../../wp-config.php');  //config to connect to database
 
 global $wpdb, $excludePages;
-$excludePages = "";
 
 // fetch JSON object from $_POST['m']
 $json = new Services_JSON(); 
@@ -22,8 +21,8 @@ function saveList($parent, $children) {
 		//IDs are 'JM_#' so strip first 3 characters
 		$id = (int) substr($children[$k]->id, 3); 
 		
-		//if it had the remove class it is now added to the excludePages var
-		if($v->hide=='exclude') $excludePages .= $id.',';
+		//if it had the remove class it is now added to the excludePages array
+		if($v->hide=='exclude') $excludePages[] = $id;
 		
 		//update pages in db
 		$postquery = "UPDATE $wpdb->posts SET menu_order='$i', post_parent='$parent' WHERE ID='$id'"; 

@@ -100,7 +100,7 @@ function pageMash_getPages($post_parent){
 function pageMash_main(){
 	global $instantUpdateFeature, $excludePagesFeature, $excludePagesList;
 	$excludePagesList = get_option('exclude_pages');
-	if(!is_array($excludePagesList)) $excludePagesList=""; //compatability for people upgrading from CSV data
+	if(!is_array($excludePagesList)) $excludePagesList[]=''; //if it's empty set as an empty array
 	
 	?>
 	<div id="debug_list"></div>

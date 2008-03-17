@@ -65,7 +65,7 @@ Garrett Murphey - Page Link Manager [http://gmurphey.com/2006/10/05/wordpress-pl
 function pageMash_getPages($post_parent){
 	//this is a recurrsive function which calls itself to produce a nested list of elements
 	//$post_parent should be 0 for root pages, or contain a pageID to return it's sub-pages
-	global $wpdb, $wp_version, $excludePagesFeature;
+	global $wpdb, $wp_version, $excludePagesFeature, $excludePagesList;
 	if($wp_version >= 2.1){ //get pages from database
 		$pageposts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_type = 'page' AND post_parent = '$post_parent' ORDER BY menu_order");
 	}else{
@@ -78,7 +78,7 @@ function pageMash_getPages($post_parent){
 		echo '>';
    
 		foreach ($pageposts as $page): //list pages, [the 'li' ID must be the page ID] ?>
-			<li id="pm_<?=$page->ID;?>" <?php if(in_array($page->ID, get_option('exclude_pages'))) echo 'class="remove"';//if page is in exclude list, add class remove ?>>
+			<li id="pm_<?=$page->ID;?>" <?php if(in_array($page->ID, $excludePagesList)) echo 'class="remove"';//if page is in exclude list, add class remove ?>>
 				<span class="title"><?=$page->post_title;?></span>
 				<span class="pageMash_pageFunctions">
 					id:<?=$page->ID;?>
@@ -98,7 +98,10 @@ function pageMash_getPages($post_parent){
 }
 
 function pageMash_main(){
-	global $instantUpdateFeature, $excludePagesFeature;
+	global $instantUpdateFeature, $excludePagesFeature, $excludePagesList;
+	$excludePagesList = get_option('exclude_pages');
+	if(!is_array($excludePagesList)) $excludePagesList[]=''; //if it's empty set as an empty array
+	
 	?>
 	<div id="debug_list"></div>
 	<div id="pageMash" class="wrap">

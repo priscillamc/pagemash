@@ -64,6 +64,8 @@ No. You no longer need to add the pageMash parameter as you did with the previou
 
 1.0.2 > Major code rewrite for exclude pages
 
+1.0.3 > Fixed datatype bug causing array problems
+
 
 == Localization ==
 

@@ -99,9 +99,7 @@ function pageMash_getPages($post_parent){
 
 function pageMash_main(){
 	global $instantUpdateFeature, $excludePagesFeature, $excludePagesList;
-	$excludePagesList = get_option('exclude_pages');
-	if(!is_array($excludePagesList)) $excludePagesList[]=''; //if it's empty set as an empty array
-	
+	if(!is_array(get_option('exclude_pages'))) $excludePagesList=array(); else $excludePagesList = get_option('exclude_pages'); //if it's empty set as an empty array
 	?>
 	<div id="debug_list"></div>
 	<div id="pageMash" class="wrap">

@@ -5,6 +5,7 @@ require('myjson.php'); //JSON decode lib
 require('./../../../wp-config.php');  //config to connect to database
 
 global $wpdb, $excludePages;
+$excludePages = array();
 
 // fetch JSON object from $_POST['m']
 $json = new Services_JSON(); 

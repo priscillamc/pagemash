@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 1.0.2
+Version: 1.0.3
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
@@ -14,8 +14,9 @@ Release:		Date:			Description:
 0.1.2			15 Feb 2008		Minor fixes > Fixed CSS&JS headers to only display on pagemash 
 1.0.0 beta		19 Feb 2008		Major update > 	Recusive page handles unlimited nested children,
 												collapsable list items, interface makeover...
-1.0.1 beta		14 Mar 2008		fixed IE > drag selects text
-1.0.2			16 Mar 2008		Major code rewrite for exclude pages
+1.0.1 beta		14 Mar 2008		Fixed IE > drag selects text
+1.0.2			16 Mar 2008		Major code rewrite for exclude pages, funct hooks onto wp_list_pages
+1.0.3			18 Mar 2008		Fixed datatype bug causing array problems
 
 FIXME:
 	@fixme with instantUpdateFeature hide will not send the update
@@ -76,9 +77,9 @@ function pageMash_getPages($post_parent){
 		echo '<ul ';
 		if($post_parent==0) echo 'id="pageMash_pages" '; //add this ID only to root 'ul' element
 		echo '>';
-   
+	
 		foreach ($pageposts as $page): //list pages, [the 'li' ID must be the page ID] ?>
-			<li id="pm_<?=$page->ID;?>" <?php if(in_array($page->ID, $excludePagesList)) echo 'class="remove"';//if page is in exclude list, add class remove ?>>
+			<li id="pm_<?=$page->ID;?>" <?php if(get_option('exclude_pages')){ if(in_array($page->ID, $excludePagesList)) echo 'class="remove"'; }//if page is in exclude list, add class remove ?>>
 				<span class="title"><?=$page->post_title;?></span>
 				<span class="pageMash_pageFunctions">
 					id:<?=$page->ID;?>
@@ -104,7 +105,7 @@ function pageMash_main(){
 	<div id="debug_list"></div>
 	<div id="pageMash" class="wrap">
 	<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-	    version [1.0.2]
+	    version [1.0.3]
 	</div>
 	<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 	<p style="margin-top:4px;">
@@ -352,7 +353,9 @@ endif; //main function only display head if jmash admin page
 
 function pageMash_add_excludes($excludes) {
 	//merge array of hardcoded exclude pages with pageMash ones
-	$excludes = array_merge( get_option('exclude_pages'), $excludes );
+	if(is_array(get_option('exclude_pages'))){
+		$excludes = array_merge( get_option('exclude_pages'), $excludes );
+	}
 	sort($excludes);
 	return $excludes;
 }

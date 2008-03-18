@@ -11,7 +11,7 @@ Organise page order and manage page structure with this simple drag-and-drop Aja
 
 Customise the order your pages are listed in and manage the parent structure with this simple Ajax drag-and-drop administrative interface with an option to toggle the page to be hidden from output. Great tool to quickly re-arrange your page menus.
 
-Checkout the example admin page: http://joelstarnes.co.uk/pagemash/example_v1.0.2
+Checkout the example admin page: http://joelstarnes.co.uk/pagemash/example
 
 Feedback is greatly appreciated: http://joelstarnes.co.uk/contact
 

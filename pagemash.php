@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
@@ -17,6 +17,7 @@ Release:		Date:			Description:
 1.0.1 beta		14 Mar 2008		Fixed IE > drag selects text
 1.0.2			16 Mar 2008		Major code rewrite for exclude pages, funct hooks onto wp_list_pages
 1.0.3			18 Mar 2008		Fixed datatype bug causing array problems
+1.0.4			11 Apr 2008		removed shorthand PHP and updated CSS and JS headers to admin_print_scripts hook.
 
 FIXME:
 	@fixme with instantUpdateFeature hide will not send the update
@@ -79,11 +80,11 @@ function pageMash_getPages($post_parent){
 		echo '>';
 	
 		foreach ($pageposts as $page): //list pages, [the 'li' ID must be the page ID] ?>
-			<li id="pm_<?=$page->ID;?>" <?php if(get_option('exclude_pages')){ if(in_array($page->ID, $excludePagesList)) echo 'class="remove"'; }//if page is in exclude list, add class remove ?>>
-				<span class="title"><?=$page->post_title;?></span>
+			<li id="pm_<?php echo $page->ID; ?>" <?php if(get_option('exclude_pages')){ if(in_array($page->ID, $excludePagesList)) echo 'class="remove"'; }//if page is in exclude list, add class remove ?>>
+				<span class="title"><?php echo $page->post_title; ?></span>
 				<span class="pageMash_pageFunctions">
-					id:<?=$page->ID;?>
-					[<a href="<?=get_settings('siteurl').'/wp-admin/post.php?action=edit&post='.$page->ID; ?>" title="Edit This Page">edit</a>]
+					id:<?php echo $page->ID; ?>
+					[<a href="<?php echo get_settings('siteurl').'/wp-admin/post.php?action=edit&post='.$page->ID; ?>" title="Edit This Page">edit</a>]
 					<?php if($excludePagesFeature): ?>
 						[<a href="#" title="Show|Hide" class="excludeLink" onclick="toggleRemove(this); return false">hide</a>]
 					<?php endif; ?>
@@ -105,7 +106,7 @@ function pageMash_main(){
 	<div id="debug_list"></div>
 	<div id="pageMash" class="wrap">
 	<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-	    version [1.0.3]
+	    version [1.0.4]
 	</div>
 	<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 	<p style="margin-top:4px;">
@@ -142,7 +143,6 @@ function pageMash_main(){
 }
 
 function pageMash_head(){
-if(strrpos('>'.$_GET["page"], 'pagemash')): // only include header stuff on pagemash admin page
 	//stylesheet & javascript to go in page header
 	global $instantUpdateFeature, $excludePagesFeature;
 	?>
@@ -153,17 +153,17 @@ if(strrpos('>'.$_GET["page"], 'pagemash')): // only include header stuff on page
 	}
 	ul#pageMash_pages li.collapsed ul {	display:none; }
 	ul#pageMash_pages li.children {
-		background-image: url('<?=get_settings("siteurl")?>/wp-content/plugins/pagemash/collapse.png'); 
+		background-image: url('<?php echo get_settings("siteurl") ?>/wp-content/plugins/pagemash/collapse.png'); 
 	}
 	ul#pageMash_pages li.collapsed.children {
-		background-image: url('<?=get_settings("siteurl")?>/wp-content/plugins/pagemash/expand.png'); 
+		background-image: url('<?php echo get_settings("siteurl") ?>/wp-content/plugins/pagemash/expand.png'); 
 	}
 	ul#pageMash_pages li { 
 		display:block; 
 		margin:2px 0 0 0; 
 		border-bottom:1px solid #aaa; border-right:1px solid #aaa; border-top:1px solid #ccc; border-left:1px solid #ccc;
 		padding:4px 6px 4px 24px; 
-		background:#F1F1F1 url('<?=get_settings("siteurl")?>/wp-content/plugins/pagemash/page.png') no-repeat 4px 4px; 
+		background:#F1F1F1 url('<?php echo get_settings("siteurl") ?>/wp-content/plugins/pagemash/page.png') no-repeat 4px 4px; 
 		list-style-type:none;
 	}
 	ul#pageMash_pages li span.title { font-weight: bold; }
@@ -214,8 +214,8 @@ if(strrpos('>'.$_GET["page"], 'pagemash')): // only include header stuff on page
 	#pageMash_code .orange{color:#EC9E00;}
 </style>
 <!-- Current code not compatible with newer releases of moo -->
-<script type="text/javascript" src="<?=get_settings('siteurl')?>/wp-content/plugins/pagemash/nest-mootools.v1.11.js"></script>
-<script type="text/javascript" src="<?=get_settings('siteurl')?>/wp-content/plugins/pagemash/nested.js"></script>
+<script type="text/javascript" src="<?php echo get_settings('siteurl') ?>/wp-content/plugins/pagemash/nest-mootools.v1.11.js"></script>
+<script type="text/javascript" src="<?php echo get_settings('siteurl') ?>/wp-content/plugins/pagemash/nested.js"></script>
 <script type="text/javascript">
 
 /* add timeout to Ajax class */
@@ -241,7 +241,7 @@ Ajax = Ajax.extend({
 /* function to retrieve list data and send to server in JSON format */
 var SaveList = function() {
 	var theDump = sortIt.serialize();
-	new Ajax('<?=get_settings("siteurl")?>/wp-content/plugins/pagemash/saveList.php', {
+	new Ajax('<?php echo get_settings("siteurl") ?>/wp-content/plugins/pagemash/saveList.php', {
 		method: 'post',
 		postBody: 'm='+Json.toString(theDump), 
 		// update: "debug_list", 
@@ -348,10 +348,9 @@ window.addEvent('domready', function(){
 }); /* close dom ready */
 </script>
 	<?php
-endif; //main function only display head if jmash admin page
 }
 
-function pageMash_add_excludes($excludes) {
+function pageMash_add_excludes($excludes){
 	//merge array of hardcoded exclude pages with pageMash ones
 	if(is_array(get_option('exclude_pages'))){
 		$excludes = array_merge( get_option('exclude_pages'), $excludes );
@@ -359,15 +358,15 @@ function pageMash_add_excludes($excludes) {
 	sort($excludes);
 	return $excludes;
 }
+
 function pageMash_add_pages(){
 	//add link in the management tab
 	global $minlevel;
-	add_management_page('pageMash page order', 'pageMash', $minlevel, __FILE__, 'pageMash_main');
+	$page = add_management_page('pageMash page order', 'pageMash', $minlevel, __FILE__, 'pageMash_main');
+	add_action( "admin_print_scripts-$page", 'pageMash_head' ); //add css styles and JS code to head
 }
 
 add_action('admin_menu', 'pageMash_add_pages'); //add admin menu under management tab
-add_action('admin_head', 'pageMash_head'); //add css styles and JS code to head
 add_filter('wp_list_pages_excludes', 'pageMash_add_excludes'); //add exclude pages to wp_list_pages funct
-
 
 ?>

@@ -3,7 +3,7 @@ Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
 Requires at least: 2.0
 Tested up to: 2.4-bleeding
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 
 Organise page order and manage page structure with this simple drag-and-drop Ajax interface.
 
@@ -65,6 +65,8 @@ No. You no longer need to add the pageMash parameter as you did with the previou
 1.0.2 > Major code rewrite for exclude pages
 
 1.0.3 > Fixed datatype bug causing array problems
+
+1.0.4 > Removed shorthand PHP and updated CSS and JS headers to admin_print_scripts hook.
 
 
 == Localization ==

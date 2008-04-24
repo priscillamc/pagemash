@@ -231,10 +231,11 @@ var Nested = new Class({
 		$$(listEl.childNodes).each(function(node, i) {
 			kids = $E('ul', node); /* set 'this.options.parentTag' straight to 'ul' to avoid safari bug */
 			serial[i] = {
-				id: node.id,
-				hide: (node.hasClass('remove')) ? 'exclude' : "",
-				children: (kids) ? this.serialize(kids) : []
+				id: node.id
 			};
+			if (node.hasClass('remove'))  serial[i].hide = true;
+			if (node.hasClass('renamed')) serial[i].renamed = $E('span.title', node).innerHTML;
+            if (kids)                     serial[i].children = this.serialize(kids);
 		}.bind(this));
 		return serial;
 	},

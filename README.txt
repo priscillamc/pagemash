@@ -1,8 +1,8 @@
 === pageMash > pageManagement ===
 Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
-Requires at least: 2.1
-Tested up to: 2.5
+Requires at least: 2.0
+Tested up to: 2.4-bleeding
 Stable tag: 1.0.4
 
 Organise page order and manage page structure with this simple drag-and-drop Ajax interface.
@@ -38,7 +38,7 @@ The code here is very simple and flexible, for more information look up `wp_list
 If you have any questions or comments, please drop me an email: http://joelstarnes.co.uk/contact
 
 = Do I need any special code in my template =
-No. You no longer need to add the pageMash parameter as you did with the previous versions [<1.0.2]. You can leave the code in as it will do no harm, but it's good to keep your template clean of unnecessary code.
+No. You no longer need to add the pageMash parameter as you did with the previous versions [<1.0.2]. You can leave the code in as it will do no harm, but it's a good idea to keep your template clean of unnecessary code.
 
 
 == Screenshots ==
@@ -67,7 +67,6 @@ No. You no longer need to add the pageMash parameter as you did with the previou
 1.0.3 > Fixed datatype bug causing array problems
 
 1.0.4 > Removed shorthand PHP and updated CSS and JS headers to admin_print_scripts hook.
-
 
 == Localization ==
 

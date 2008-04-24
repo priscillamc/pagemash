@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 1.0.4
+Version: 1.1.0
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
@@ -12,15 +12,16 @@ Release:		Date:			Description:
 0.1.0			10 Feb 2008		Initial release
 0.1.1			12 Feb 2008		Minor fixes > Removed external include
 0.1.2			15 Feb 2008		Minor fixes > Fixed CSS&JS headers to only display on pagemash 
-1.0.0 beta		19 Feb 2008		Major update > 	Recusive page handles unlimited nested children,
-												collapsable list items, interface makeover...
+1.0.0 beta		19 Feb 2008		Major update > 	Recusive page handles unlimited nested children, collapsable list items, interface makeover...
 1.0.1 beta		14 Mar 2008		Fixed IE > drag selects text
 1.0.2			16 Mar 2008		Major code rewrite for exclude pages, funct hooks onto wp_list_pages
 1.0.3			18 Mar 2008		Fixed datatype bug causing array problems
 1.0.4			11 Apr 2008		removed shorthand PHP and updated CSS and JS headers to admin_print_scripts hook.
+1.1.0			24 Apr 2008		Added quick rename, externalised scripts, changed display of edit|hide|rename links, deregisters prototype
 
 FIXME:
 	@fixme with instantUpdateFeature hide will not send the update
+	@todo readme txt CMS, mass edit pages, exclude pages, manage, organise, 
 	
 */
 #########CONFIG OPTIONS############################################
@@ -63,6 +64,9 @@ Garrett Murphey - Page Link Manager [http://gmurphey.com/2006/10/05/wordpress-pl
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+//Global Vars
+$pageMash_rel_dir = 'wp-content/plugins/pagemash/';
+$pageMash_abs_dir = get_bloginfo('wpurl').'/'.$pageMash_rel_dir;
 
 function pageMash_getPages($post_parent){
 	//this is a recurrsive function which calls itself to produce a nested list of elements
@@ -75,19 +79,20 @@ function pageMash_getPages($post_parent){
 	}
 	
 	if ($pageposts == true){ //if $pageposts == true then it does have sub-page(s), so list them.
-		echo '<ul ';
-		if($post_parent==0) echo 'id="pageMash_pages" '; //add this ID only to root 'ul' element
-		echo '>';
-	
-		foreach ($pageposts as $page): //list pages, [the 'li' ID must be the page ID] ?>
-			<li id="pm_<?php echo $page->ID; ?>" <?php if(get_option('exclude_pages')){ if(in_array($page->ID, $excludePagesList)) echo 'class="remove"'; }//if page is in exclude list, add class remove ?>>
-				<span class="title"><?php echo $page->post_title; ?></span>
-				<span class="pageMash_pageFunctions">
-					id:<?php echo $page->ID; ?>
-					[<a href="<?php echo get_settings('siteurl').'/wp-admin/post.php?action=edit&post='.$page->ID; ?>" title="Edit This Page">edit</a>]
-					<?php if($excludePagesFeature): ?>
-						[<a href="#" title="Show|Hide" class="excludeLink" onclick="toggleRemove(this); return false">hide</a>]
-					<?php endif; ?>
+		echo (0 === $post_parent) ? '<ul id="pageMash_pages">' : '<ul>'; //add this ID only to root 'ul' element
+		foreach ($pageposts as $page): //list pages, [the 'li' ID must be pm_'page ID'] ?>
+			<li id="pm_<?php echo $page->ID;?>" <?php if(get_option('exclude_pages')){ if(in_array($page->ID, $excludePagesList)) echo 'class="remove"'; }//if page is in exclude list, add class remove ?>>
+				<span class="title"><?php echo $page->post_title;?></span>
+				<span class="pageMash_box">
+					<span class="pageMash_more">&raquo;</span>
+					<span class="pageMash_pageFunctions">
+						id:<?php echo $page->ID;?>
+						[<a href="<?php echo get_bloginfo('wpurl').'/wp-admin/post.php?action=edit&post='.$page->ID; ?>" title="Edit This Page">edit</a>]
+						<?php if($excludePagesFeature): ?>
+							[<a href="#" title="Show|Hide" class="excludeLink" onclick="toggleRemove(this); return false">hide</a>]
+						<?php endif; ?>
+						[<a href="#" title="Rename Page" class="rename">Rename</a>]
+					</span>
 				</span>
 				<?php pageMash_getPages($page->ID)  //call this function to list any sub-pages (passing it the pageID) ?>
 			</li>
@@ -105,248 +110,70 @@ function pageMash_main(){
 	?>
 	<div id="debug_list"></div>
 	<div id="pageMash" class="wrap">
-	<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-	    version [1.0.4]
-	</div>
-	<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
-	<p style="margin-top:4px;">
-		Just drag the pages <strong>up</strong> or <strong>down</strong> to change the page order and <strong>left</strong> or <strong>right</strong> to change the page's parent, then hit 'update'.<br />
-		The icon to the left of each page shows if it has child pages, <strong>double click</strong> anywhere on that item to toggle <strong>expand|collapse</strong> of it's children.
-	</p>
+		<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
+		    version [1.1.0]
+		</div>
+		<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
+		<p style="margin-top:4px;">
+			Just drag the pages <strong>up</strong> or <strong>down</strong> to change the page order and <strong>left</strong> or <strong>right</strong> to change the page's parent, then hit 'update'.<br />
+			The icon to the left of each page shows if it has child pages, <strong>double click</strong> anywhere on that item to toggle <strong>expand|collapse</strong> of it's children.
+		</p>
 		
-	<div>
-	    <?php pageMash_getPages(0); //pass 0, as initial parent ?>
-	</div>
-	
-	<p class="submit">
-		<div id="update_status" style="float:left; margin-left:40px; opacity:0;"></div>
-		<?php if(!$instantUpdateFeature): ?>
-			<input type="submit" id="pageMash_submit" tabindex="2" style="font-weight: bold; float:right;" value="Update" name="submit"/>
-		<?php endif; ?>
-	</p>
-	<br style="margin-bottom: .8em;" />
+		<?php pageMash_getPages(0); //pass 0, as initial parent ?>
+		
+		<p class="submit">
+			<div id="update_status" style="float:left; margin-left:40px; opacity:0;"></div>
+			<?php if(!$instantUpdateFeature): ?>
+				<input type="submit" id="pageMash_submit" tabindex="2" style="font-weight: bold; float:right;" value="Update" name="submit"/>
+			<?php endif; ?>
+		</p>
+		<br style="margin-bottom: .8em;" />
 	</div>
 
 	<div class="wrap" style="width:160px; margin-bottom:0; padding:2px; text-align:center;"><a href="#" id="pageMashInfo_toggle" style="text-align:center;">Show|Hide Further Info</a></div>
 	<div class="wrap" id="pageMashInfo" style="margin-top:-1px;">
 		<h2>How to Use</h2>
 		<p>pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar [WP admin page > Presentation > Widgets]. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.</p>
-		<p>You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you're using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top levle pages). The code should look something like the following:</p>
+		<p>You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you're using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top level pages). The code should look something like the following:</p>
 		<p style="margin-bottom:0; font-weight:bold;">Code:</p>
 		<code id="pageMash_code">
 			<span class="white">&lt;?php</span> <span class="blue">wp_list_pages(</span><span class="orange">'title_li=&lt;h2&gt;Pages&lt;/h2&gt;&amp;depth=0'</span><span class="blue">);</span> <span class="white">?&gt;</span>
 		</code>
 		<p>You can also hard-code pages to exclude and these will be merged with the pages you set to exclude in your pageMash admin.</p>
 		<p>The code here is very simple and flexible, for more information look up <a href="http://codex.wordpress.org/Template_Tags/wp_list_pages" title="wp_list_pages Documentation">wp_list_pages() in the Wordpress Codex</a> as it is very well documented and if you have any further questions or feedback I like getting messages, so <a href="http://joelstarnes.co.uk/contact/" title="email Joel Starnes">drop me an email</a>.</p>
+		<br />
 	</div>
 	<?php
 }
 
 function pageMash_head(){
 	//stylesheet & javascript to go in page header
-	global $instantUpdateFeature, $excludePagesFeature;
+	global $pageMash_rel_dir;
+	
+	wp_deregister_script('prototype');//remove prototype since it is incompatible  with mootools
+	wp_enqueue_script('pagemash_mootools', '/'.$pageMash_rel_dir.'nest-mootools.v1.11.js', false, false); //code is not compatible with other releases of moo
+	wp_enqueue_script('pagemash_nested', '/'.$pageMash_rel_dir.'nested.js', array('pagemash_mootools'), false);
+	wp_enqueue_script('pagemash_inlineEdit', '/'.$pageMash_rel_dir.'inlineEdit.v1.2.js', array('pagemash_mootools'), false);
+	wp_enqueue_script('pagemash', '/'.$pageMash_rel_dir.'pagemash-js.php', array('pagemash_mootools'), false);
+	add_action('admin_head', 'pageMash_add_css', 1);
+
+}
+
+function pageMash_add_css(){
+	global $pageMash_abs_dir;
 	?>
-<style type="text/css">
-	ul#pageMash_pages {
-		margin:0 0 0 0;
-		list-style:none;
-	}
-	ul#pageMash_pages li.collapsed ul {	display:none; }
-	ul#pageMash_pages li.children {
-		background-image: url('<?php echo get_settings("siteurl") ?>/wp-content/plugins/pagemash/collapse.png'); 
-	}
-	ul#pageMash_pages li.collapsed.children {
-		background-image: url('<?php echo get_settings("siteurl") ?>/wp-content/plugins/pagemash/expand.png'); 
-	}
-	ul#pageMash_pages li { 
-		display:block; 
-		margin:2px 0 0 0; 
-		border-bottom:1px solid #aaa; border-right:1px solid #aaa; border-top:1px solid #ccc; border-left:1px solid #ccc;
-		padding:4px 6px 4px 24px; 
-		background:#F1F1F1 url('<?php echo get_settings("siteurl") ?>/wp-content/plugins/pagemash/page.png') no-repeat 4px 4px; 
-		list-style-type:none;
-	}
-	ul#pageMash_pages li span.title { font-weight: bold; }
-	ul#pageMash_pages li.collapsed.children span.title { text-decoration: underline; }
-	ul#pageMash_pages li.collapsed.children li span.title { text-decoration: none; }
-	#update_status { 
-		font-weight:bold; 
-		display:block; 
-		border:2px solid #AC604C;
-		background-color: #DDA37A;
-		padding: 2px 6px;
-	}
-	ul#pageMash_pages li.remove {
-		color:grey;
-		border-style:dashed; 
-		border-color:#aaa; 
-		opacity:.5; 
-		filter:alpha(opacity=50); zoom:1; /* ie hack[has layout] for opacity */
-	}
-	ul#pageMash_pages li.remove a { color:grey; }
-	ul#pageMash_pages li span.pageMash_pageFunctions {
-		border:1px solid #ccc;
-		background-color: #eee;
-		padding: 1px 3px;
-	}
-	ul#pageMash_pages li span.pageMash_pageFunctions a { border:0; }
-	
-	/* Show [page id, 'edit page' link and 'hide' link] function box on hover */
-	ul#pageMash_pages li span.pageMash_pageFunctions { display:none; }
-	ul#pageMash_pages li:hover span.pageMash_pageFunctions { display:inline; }
-	ul#pageMash_pages li:hover li span.pageMash_pageFunctions { display:none; }
-	ul#pageMash_pages li:hover li:hover span.pageMash_pageFunctions { display:inline; }
-	ul#pageMash_pages li:hover li:hover li span.pageMash_pageFunctions { display:none; }
-	ul#pageMash_pages li:hover li:hover li:hover span.pageMash_pageFunctions { display:inline; }
-	ul#pageMash_pages li:hover li:hover li:hover li span.pageMash_pageFunctions { display:none; }
-	ul#pageMash_pages li:hover li:hover li:hover li:hover span.pageMash_pageFunctions { display:inline; }
-	ul#pageMash_pages li:hover li:hover li:hover li:hover li span.pageMash_pageFunctions { display:none; }
-	ul#pageMash_pages li:hover li:hover li:hover li:hover li:hover span.pageMash_pageFunctions { display:inline; }
-	ul#pageMash_pages li:hover li:hover li:hover li:hover li:hover li span.pageMash_pageFunctions { display:none; }
-	ul#pageMash_pages li:hover li:hover li:hover li:hover li:hover li:hover span.pageMash_pageFunctions { display:inline; }
-	
-	#pageMash_code {display:block; border:solid 3px #858EF4; background-color:#211E1E; padding:7px; margin:0px;}
-	#pageMash_code .white{color:#DADADA;}
-	#pageMash_code .purple{color:#9B2E4D; font-weight:bold;}
-	#pageMash_code .green{color:#00FF00;}
-	#pageMash_code .blue{color:#858EF4;}
-	#pageMash_code .yellow{color:#C1C144;}
-	#pageMash_code .orange{color:#EC9E00;}
-</style>
-<!-- Current code not compatible with newer releases of moo -->
-<script type="text/javascript" src="<?php echo get_settings('siteurl') ?>/wp-content/plugins/pagemash/nest-mootools.v1.11.js"></script>
-<script type="text/javascript" src="<?php echo get_settings('siteurl') ?>/wp-content/plugins/pagemash/nested.js"></script>
-<script type="text/javascript">
-
-/* add timeout to Ajax class */
-Ajax = Ajax.extend({
-	request: function(){
-	if (this.options.timeout) {
-		this.timeoutTimer=window.setTimeout(this.callTimeout.bindAsEventListener(this), this.options.timeout);
-		this.addEvent('onComplete', this.removeTimer);
-	}
-	this.parent();
-	},
-	callTimeout: function () {
-		this.transport.abort();
-		this.onFailure();
-		if (this.options.onTimeout) {
-			this.options.onTimeout();
-		}
-	},
-	removeTimer: function() {
-		window.clearTimeout(this.timeoutTimer);
-	}
-});
-/* function to retrieve list data and send to server in JSON format */
-var SaveList = function() {
-	var theDump = sortIt.serialize();
-	new Ajax('<?php echo get_settings("siteurl") ?>/wp-content/plugins/pagemash/saveList.php', {
-		method: 'post',
-		postBody: 'm='+Json.toString(theDump), 
-		// update: "debug_list", 
-		onComplete: function() {
-			$('update_status').setText('Database Updated');
-			new Fx.Style($('update_status'), 'opacity', {duration: 500}).start(0,1).chain(function() {
-				new Fx.Style($('update_status'), 'opacity', {duration: 1500}).start(1,0);
-			});
-		},
-		timeout: 8500, 
-		onTimeout: function() {
-			$('update_status').setText('Error: Update Timeout');
-			new Fx.Style($('update_status'), 'opacity', {duration: 200}).start(0,1);
-		}
-	}).request();
-};
-/* toggle the remove class of grandparent */
-<?php if($excludePagesFeature): ?>
-	var toggleRemove = function(el) {
-		el.parentNode.parentNode.toggleClass('remove');
-	}
-<?php endif; ?>
-
-
-/* ******** dom ready ******** */
-window.addEvent('domready', function(){
-	sortIt = new Nested('pageMash_pages', {
-		collapse: true,
-		onComplete: function(el) {
-			el.setStyle('background-color', '#F1F1F1');
-			sortIt.altColor();
-			<?php if($instantUpdateFeature): ?>SaveList();<?php endif; ?>
-			
-			$ES('li','pageMash_pages').each(function(el) {
-				if( el.getElement('ul') ){
-					 el.addClass('children');
-				} else {
-					el.removeClass('children');
-				}
-			});
-		}
-	});	
-	Nested.implement({
-		/* alternate the colours of top level nodes */
-		altColor: function(){
-			var odd = 1;
-			this.list.getChildren().each(function(element, i){
-				if(odd==1){
-					odd=0;
-					element.setStyle('background-color', '#CFE8A8');
-				}else{
-					odd=1;
-					element.setStyle('background-color', '#D8E8E6');
-				}
-			});
-		}
-	});
-	sortIt.altColor();
-	$('update_status').setStyle('opacity', 0);
-		
-	<?php if(!$instantUpdateFeature): ?>
-		$('pageMash_submit').addEvent('click', function(e){
-			e = new Event(e);
-			SaveList();
-			e.stop();
-		});
-	<?php endif; ?> 
-
-	var pageMashInfo = new Fx.Slide('pageMashInfo');
-	$('pageMashInfo_toggle').addEvent('click', function(e){
-		e = new Event(e);
-		pageMashInfo.toggle();
-		e.stop();
-		switch($('pageMashInfo_toggle').getText()) {
-			case "Show Further Info":
-				$('pageMashInfo_toggle').setText('Hide Further Info');
-			  break    
-			case "Hide Further Info":
-				$('pageMashInfo_toggle').setText('Show Further Info');
-			  break
-		}
-	});
-	pageMashInfo.hide();
-	$('pageMashInfo_toggle').setText('Show Further Info');
-	
-	
-	/* loop through each page */
-	$ES('li','pageMash_pages').each(function(el) {
-		/* If the li has a 'ul' child; it has children pages */
-		if( el.getElement('ul') ) el.addClass('children');
-		
-		/* on page dblClick add this event */
-		el.addEvent('dblclick', function(e){
-			e = new Event(e);
-			if(el.hasClass('children')) el.toggleClass('collapsed');
-			e.stop();
-		});
-	});
-
-	//disable drag text-selection for IE
-	if (typeof document.body.onselectstart!="undefined")
-		document.body.onselectstart=function(){return false}
-
-}); /* close dom ready */
-</script>
+<link rel="stylesheet" type="text/css" href="<?php echo $pageMash_abs_dir ?>pagemash-css.php" />
+<!--                     __  __           _     
+       WordPress Plugin |  \/  |         | |    
+  _ __   __ _  __ _  ___| \  / | __ _ ___| |__  
+ | '_ \ / _` |/ _` |/ _ \ |\/| |/ _` / __| '_ \ 
+ | |_) | (_| | (_| |  __/ |  | | (_| \__ \ | | |
+ | .__/ \__,_|\__, |\___|_|  |_|\__,_|___/_| |_|
+ | |           __/ |  Author: Joel Starnes
+ |_|          |___/   URL: pagemash.joelstarnes.co.uk
+ 
+ >>pageMash Admin Page
+-->
 	<?php
 }
 
@@ -363,10 +190,11 @@ function pageMash_add_pages(){
 	//add link in the management tab
 	global $minlevel;
 	$page = add_management_page('pageMash page order', 'pageMash', $minlevel, __FILE__, 'pageMash_main');
-	add_action( "admin_print_scripts-$page", 'pageMash_head' ); //add css styles and JS code to head
+	add_action("admin_print_scripts-$page", 'pageMash_head'); //add css styles and JS code to head
 }
 
 add_action('admin_menu', 'pageMash_add_pages'); //add admin menu under management tab
 add_filter('wp_list_pages_excludes', 'pageMash_add_excludes'); //add exclude pages to wp_list_pages funct
+
 
 ?>

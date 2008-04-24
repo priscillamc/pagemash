@@ -1,8 +1,20 @@
 <?php
-error_reporting(E_ALL);
+/*                       __  __           _     
+       WordPress Plugin |  \/  |         | |    
+  _ __   __ _  __ _  ___| \  / | __ _ ___| |__  
+ | '_ \ / _` |/ _` |/ _ \ |\/| |/ _` / __| '_ \ 
+ | |_) | (_| | (_| |  __/ |  | | (_| \__ \ | | |
+ | .__/ \__,_|\__, |\___|_|  |_|\__,_|___/_| |_|
+ | |           __/ |  Author: Joel Starnes
+ |_|          |___/   URL: pagemash.joelstarnes.co.uk
+ 
+ >>Decodes JSON data and updates database accordingly
+*/
 
-require('myjson.php'); //JSON decode lib
-require('./../../../wp-config.php');  //config to connect to database
+if(!$_POST['m']) die('no data'); //die if no data is sent
+error_reporting(E_ALL);
+require_once('myjson.php'); //JSON decode lib
+require_once('./../../../wp-config.php');  //config to connect to database
 
 global $wpdb, $excludePages;
 $excludePages = array();
@@ -23,12 +35,15 @@ function saveList($parent, $children) {
 		$id = (int) substr($children[$k]->id, 3); 
 		
 		//if it had the remove class it is now added to the excludePages array
-		if($v->hide=='exclude') $excludePages[] = $id;
+		if(isset($v->hide)) $excludePages[] = $id;
 		
 		//update pages in db
-		$postquery = "UPDATE $wpdb->posts SET menu_order='$i', post_parent='$parent' WHERE ID='$id'"; 
-		$wpdb->query($postquery);
+		$postquery  = "UPDATE $wpdb->posts SET ";
+		$postquery .= "menu_order='$i', post_parent='$parent'";
+		if (isset($v->renamed)) $postquery .= ", post_title='$v->renamed'";
+		$postquery .= " WHERE ID='$id'"; 
 		
+		$wpdb->query($postquery); //$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = %d, post_parent = %s WHERE ID = %d" ), $i, $parent, $id );
 		echo $postquery;
 		echo "\n";
 
@@ -36,8 +51,11 @@ function saveList($parent, $children) {
 	$i++;
 	}
 }
-
+echo "Update Pages: \n";
 echo saveList(0, $aMenu);
+$wpdb->print_error();
+echo "\n \nExclude Pages: \n";
+print_r($excludePages);
 
 //update excludePages option in database
 update_option("exclude_pages", $excludePages, '', 'yes');

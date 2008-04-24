@@ -1,9 +1,9 @@
 === pageMash > pageManagement ===
 Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
-Requires at least: 2.0
-Tested up to: 2.4-bleeding
-Stable tag: 1.0.4
+Requires at least: 2.1
+Tested up to: 2.5
+Stable tag: 1.1.0
 
 Organise page order and manage page structure with this simple drag-and-drop Ajax interface.
 
@@ -12,7 +12,6 @@ Organise page order and manage page structure with this simple drag-and-drop Aja
 Customise the order your pages are listed in and manage the parent structure with this simple Ajax drag-and-drop administrative interface with an option to toggle the page to be hidden from output. Great tool to quickly re-arrange your page menus.
 
 Checkout the example admin page: http://joelstarnes.co.uk/pagemash/example
-
 Feedback is greatly appreciated: http://joelstarnes.co.uk/contact
 
 == Installation ==
@@ -40,6 +39,8 @@ If you have any questions or comments, please drop me an email: http://joelstarn
 = Do I need any special code in my template =
 No. You no longer need to add the pageMash parameter as you did with the previous versions [<1.0.2]. You can leave the code in as it will do no harm, but it's a good idea to keep your template clean of unnecessary code.
 
+= Which browsers are supported =
+Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and Opera. (NB in IE7 you need to use the page name as a drag handle.)
 
 == Screenshots ==
 
@@ -67,6 +68,8 @@ No. You no longer need to add the pageMash parameter as you did with the previou
 1.0.3 > Fixed datatype bug causing array problems
 
 1.0.4 > Removed shorthand PHP and updated CSS and JS headers to admin_print_scripts hook.
+
+1.1.0 > Added quick rename, externalised scripts, changed display of edit|hide|rename links, deregisters prototype
 
 == Localization ==
 

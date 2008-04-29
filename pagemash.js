@@ -1,8 +1,3 @@
-<?php
-	require_once('../../../wp-config.php');
-	cache_javascript_headers(); 
-	global $instantUpdateFeature, $excludePagesFeature, $pageMash_abs_dir;
-?>
 /*                       __  __           _     
        WordPress Plugin |  \/  |         | |    
   _ __   __ _  __ _  ___| \  / | __ _ ___| |__  
@@ -16,24 +11,15 @@
 */
 
 window.addEvent('domready', function(){ 
-	// When logging debug messages with console.warn
-	// if user doesn't have Firebug, write them to the DOM instead  
-	if (typeof console == "undefined") {
-		// Create an unordered list to display warning messages  
-		var logsOutput = document.createElement('ul');  
-		$("debug_list").appendChild(logsOutput);  
+	// If user doesn't have Firebug, create empty functions for the console.
+	if (!window.console || !console.firebug)
+	{
+	    var names = ["log", "debug", "info", "warn", "error", "assert", "dir", "dirxml",
+	    "group", "groupEnd", "time", "timeEnd", "count", "trace", "profile", "profileEnd"];
 	
-		// Define console.warn() function  
-		console = {  
-			warn: function(msg) {  
-				logsOutput.innerHTML += '<li>' + msg + '</li>';  
-			}  
-		};
-		// Create an empty function for all other console methods
-		var consoleMethods = ["log", "debug", "info", "error", "assert", "dir", "dirxml", "group",
-					 "groupEnd", "time", "timeEnd", "count", "trace", "profile", "profileEnd"];  
-		for (var i = 0; i < consoleMethods.length; ++i)  
-			console[consoleMethods[i]] = function() {}  
+	    window.console = {};
+	    for (var i = 0; i < names.length; ++i)
+	        window.console[names[i]] = function() {}
 	}
 });
 
@@ -63,7 +49,7 @@ var SaveList = function() {
 	var theDump = sortIt.serialize();
 	console.group('Database Update');
 	console.time('Update Chronometer');
-	new Ajax('<?php echo $pageMash_abs_dir; ?>saveList.php', {
+	new Ajax('../wp-content/plugins/pagemash/saveList.php', {
 		method: 'post',
 		postBody: 'm='+Json.toString(theDump), 
 		// update: "debug_list", 
@@ -87,12 +73,10 @@ var SaveList = function() {
 	}).request();
 };
 /* toggle the remove class of grandparent */
-<?php if($excludePagesFeature): ?>
 	var toggleRemove = function(el) {
 		el.parentNode.parentNode.parentNode.toggleClass('remove');
 		console.log("Page: '%s' has been %s", $E('span.title', el.parentNode.parentNode.parentNode).innerHTML, (el.parentNode.parentNode.hasClass('remove') ? 'HIDDEN': 'MADE VISIBLE' ));
 	}
-<?php endif; ?>
 
 
 /* ******** dom ready ******** */
@@ -102,7 +86,6 @@ window.addEvent('domready', function(){
 		onComplete: function(el) {
 			el.setStyle('background-color', '#F1F1F1');
 			sortIt.altColor();
-			<?php if($instantUpdateFeature): ?>SaveList();<?php endif; ?>
 			
 			$ES('li','pageMash_pages').each(function(el) {
 				if( el.getElement('ul') ){
@@ -131,13 +114,11 @@ window.addEvent('domready', function(){
 	sortIt.altColor();
 	$('update_status').setStyle('opacity', 0);
 		
-<?php if(!$instantUpdateFeature): ?>
 	$('pageMash_submit').addEvent('click', function(e){
 		e = new Event(e);
 		SaveList();
 		e.stop();
 	});
-<?php endif; ?> 
 
 	var pageMashInfo = new Fx.Slide('pageMashInfo');
 	$('pageMashInfo_toggle').addEvent('click', function(e){

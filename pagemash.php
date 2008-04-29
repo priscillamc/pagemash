@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 1.1.0
+Version: 1.1.1
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
@@ -18,10 +18,7 @@ Release:		Date:			Description:
 1.0.3			18 Mar 2008		Fixed datatype bug causing array problems
 1.0.4			11 Apr 2008		removed shorthand PHP and updated CSS and JS headers to admin_print_scripts hook.
 1.1.0			24 Apr 2008		Added quick rename, externalised scripts, changed display of edit|hide|rename links, deregisters prototype
-
-FIXME:
-	@fixme with instantUpdateFeature hide will not send the update
-	@todo readme txt CMS, mass edit pages, exclude pages, manage, organise, 
+1.11			29 Apr 2008		Fix a bug with console.log for safari, removed php code from js&css scripts to fix error
 	
 */
 #########CONFIG OPTIONS############################################
@@ -30,12 +27,6 @@ $minlevel = 7;  /*[deafult=7]*/
 
 $excludePagesFeature = true;  /*[deafult=true]*/
 /* Allows you to set pages not to be listed */
-
-$instantUpdateFeature = false;  /*[deafult=false]*/
-/* Updates the database instantly after a move using ajax 
-   otherwise it will wait for update button press.
-   nb. this feature has not been optimised and enabling will cause 
-   much increased server load */
 
 ###################################################################
 /*
@@ -105,13 +96,13 @@ function pageMash_getPages($post_parent){
 }
 
 function pageMash_main(){
-	global $instantUpdateFeature, $excludePagesFeature, $excludePagesList;
+	global $excludePagesFeature, $excludePagesList;
 	if(!is_array(get_option('exclude_pages'))) $excludePagesList=array(); else $excludePagesList = get_option('exclude_pages'); //if it's empty set as an empty array
 	?>
 	<div id="debug_list"></div>
 	<div id="pageMash" class="wrap">
 		<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-		    version [1.1.0]
+		    version [1.1.1]
 		</div>
 		<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 		<p style="margin-top:4px;">
@@ -123,9 +114,7 @@ function pageMash_main(){
 		
 		<p class="submit">
 			<div id="update_status" style="float:left; margin-left:40px; opacity:0;"></div>
-			<?php if(!$instantUpdateFeature): ?>
 				<input type="submit" id="pageMash_submit" tabindex="2" style="font-weight: bold; float:right;" value="Update" name="submit"/>
-			<?php endif; ?>
 		</p>
 		<br style="margin-bottom: .8em;" />
 	</div>
@@ -154,7 +143,7 @@ function pageMash_head(){
 	wp_enqueue_script('pagemash_mootools', '/'.$pageMash_rel_dir.'nest-mootools.v1.11.js', false, false); //code is not compatible with other releases of moo
 	wp_enqueue_script('pagemash_nested', '/'.$pageMash_rel_dir.'nested.js', array('pagemash_mootools'), false);
 	wp_enqueue_script('pagemash_inlineEdit', '/'.$pageMash_rel_dir.'inlineEdit.v1.2.js', array('pagemash_mootools'), false);
-	wp_enqueue_script('pagemash', '/'.$pageMash_rel_dir.'pagemash-js.php', array('pagemash_mootools'), false);
+	wp_enqueue_script('pagemash', '/'.$pageMash_rel_dir.'pagemash.js', array('pagemash_mootools'), false);
 	add_action('admin_head', 'pageMash_add_css', 1);
 
 }
@@ -162,7 +151,7 @@ function pageMash_head(){
 function pageMash_add_css(){
 	global $pageMash_abs_dir;
 	?>
-<link rel="stylesheet" type="text/css" href="<?php echo $pageMash_abs_dir ?>pagemash-css.php" />
+<link rel="stylesheet" type="text/css" href="<?php echo $pageMash_abs_dir ?>pagemash.css" />
 <!--                     __  __           _     
        WordPress Plugin |  \/  |         | |    
   _ __   __ _  __ _  ___| \  / | __ _ ___| |__  

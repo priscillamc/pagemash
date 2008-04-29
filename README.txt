@@ -52,7 +52,8 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
 ==Change Log==
 
 * 1.1.1
- * Fix a bug with console.log for safari, removed php code from js&css scripts to fix error
+ * Fix a bug with console.log for safari
+ * Removed php code from js&css scripts to fix error
 
 * 1.1.0
  * Added quick rename

@@ -14,7 +14,9 @@
 if(!$_POST['m']) die('no data'); //die if no data is sent
 error_reporting(E_ALL);
 require_once('myjson.php'); //JSON decode lib
-require_once('./../../../wp-config.php');  //config to connect to database
+//require_once('./../../../wp-config.php');  //config to connect to database
+  include_once "../../../wp-config.php";
+  include_once "../../../wp-settings.php";
 
 global $wpdb, $excludePages;
 $excludePages = array();
@@ -46,7 +48,7 @@ function saveList($parent, $children) {
 		$wpdb->query($postquery); //$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = %d, post_parent = %s WHERE ID = %d" ), $i, $parent, $id );
 		echo $postquery;
 		echo "\n";
-
+		
 		if (isset($v->children[0])) {saveList($id, $v->children);}
 	$i++;
 	}

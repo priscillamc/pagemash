@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 1.1.1
+Version: 1.1.2
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
@@ -18,7 +18,8 @@ Release:		Date:			Description:
 1.0.3			18 Mar 2008		Fixed datatype bug causing array problems
 1.0.4			11 Apr 2008		removed shorthand PHP and updated CSS and JS headers to admin_print_scripts hook.
 1.1.0			24 Apr 2008		Added quick rename, externalised scripts, changed display of edit|hide|rename links, deregisters prototype
-1.11			29 Apr 2008		Fix a bug with console.log for safari, removed php code from js&css scripts to fix error
+1.1.1			29 Apr 2008		Fix a bug with console.log for safari, removed php code from js&css scripts to fix error
+1.1.2			24 May 2008		Added Expand all | Collapse all buttons
 	
 */
 #########CONFIG OPTIONS############################################
@@ -27,6 +28,12 @@ $minlevel = 7;  /*[deafult=7]*/
 
 $excludePagesFeature = true;  /*[deafult=true]*/
 /* Allows you to set pages not to be listed */
+
+$renamePagesFeature = true;  /*[deafult=true]*/
+/* Lets you rename pages */
+
+$CollapsePagesOnLoad = false;  /*[deafult=true]*/
+/* Collapse all parent pages on load */
 
 ###################################################################
 /*
@@ -62,7 +69,7 @@ $pageMash_abs_dir = get_bloginfo('wpurl').'/'.$pageMash_rel_dir;
 function pageMash_getPages($post_parent){
 	//this is a recurrsive function which calls itself to produce a nested list of elements
 	//$post_parent should be 0 for root pages, or contain a pageID to return it's sub-pages
-	global $wpdb, $wp_version, $excludePagesFeature, $excludePagesList;
+	global $wpdb, $wp_version, $excludePagesFeature, $excludePagesList, $renamePagesFeature;
 	if($wp_version >= 2.1){ //get pages from database
 		$pageposts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_type = 'page' AND post_parent = '$post_parent' ORDER BY menu_order");
 	}else{
@@ -71,8 +78,13 @@ function pageMash_getPages($post_parent){
 	
 	if ($pageposts == true){ //if $pageposts == true then it does have sub-page(s), so list them.
 		echo (0 === $post_parent) ? '<ul id="pageMash_pages">' : '<ul>'; //add this ID only to root 'ul' element
-		foreach ($pageposts as $page): //list pages, [the 'li' ID must be pm_'page ID'] ?>
-			<li id="pm_<?php echo $page->ID;?>" <?php if(get_option('exclude_pages')){ if(in_array($page->ID, $excludePagesList)) echo 'class="remove"'; }//if page is in exclude list, add class remove ?>>
+		foreach ($pageposts as $page): //list pages, [the 'li' ID must be pm_'page ID']
+			if(get_option('exclude_pages')){ //need this for first time run when exclude_pages are undefined
+				if(in_array($page->ID, $excludePagesList))
+					$liClass="remove"; //if page is in exclude list, add class remove
+			}
+			?>
+			<li id="pm_<?php echo $page->ID;?>"<?php if($liClass) echo ' class="'.$liClass.'"'; ?>>
 				<span class="title"><?php echo $page->post_title;?></span>
 				<span class="pageMash_box">
 					<span class="pageMash_more">&raquo;</span>
@@ -82,7 +94,9 @@ function pageMash_getPages($post_parent){
 						<?php if($excludePagesFeature): ?>
 							[<a href="#" title="Show|Hide" class="excludeLink" onclick="toggleRemove(this); return false">hide</a>]
 						<?php endif; ?>
-						[<a href="#" title="Rename Page" class="rename">Rename</a>]
+						<?php if($renamePagesFeature): ?>
+							[<a href="#" title="Rename Page" class="rename">Rename</a>]
+						<?php endif; ?>
 					</span>
 				</span>
 				<?php pageMash_getPages($page->ID)  //call this function to list any sub-pages (passing it the pageID) ?>
@@ -102,13 +116,14 @@ function pageMash_main(){
 	<div id="debug_list"></div>
 	<div id="pageMash" class="wrap">
 		<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-		    version [1.1.1]
+		    version [1.1.2]
 		</div>
 		<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 		<p style="margin-top:4px;">
 			Just drag the pages <strong>up</strong> or <strong>down</strong> to change the page order and <strong>left</strong> or <strong>right</strong> to change the page's parent, then hit 'update'.<br />
-			The icon to the left of each page shows if it has child pages, <strong>double click</strong> anywhere on that item to toggle <strong>expand|collapse</strong> of it's children.
+			The icon to the left of each page shows if it has child pages, <strong>double click</strong> on that item to toggle <strong>expand|collapse</strong> of it's children.
 		</p>
+		<p><a href="#" id="expand_all">Expand All</a> | <a href="#" id="collapse_all">Collapse All</a></p>
 		
 		<?php pageMash_getPages(0); //pass 0, as initial parent ?>
 		
@@ -119,7 +134,7 @@ function pageMash_main(){
 		<br style="margin-bottom: .8em;" />
 	</div>
 
-	<div class="wrap" style="width:160px; margin-bottom:0; padding:2px; text-align:center;"><a href="#" id="pageMashInfo_toggle" style="text-align:center;">Show|Hide Further Info</a></div>
+	<div class="wrap" style="width:160px; margin-bottom:0; padding:0;"><p><a href="#" id="pageMashInfo_toggle">Show|Hide Further Info</a></p></div>
 	<div class="wrap" id="pageMashInfo" style="margin-top:-1px;">
 		<h2>How to Use</h2>
 		<p>pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar [WP admin page > Presentation > Widgets]. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.</p>
@@ -137,29 +152,38 @@ function pageMash_main(){
 
 function pageMash_head(){
 	//stylesheet & javascript to go in page header
-	global $pageMash_rel_dir;
+	global $pageMash_rel_dir, $CollapsePagesOnLoad;
 	
-	wp_deregister_script('prototype');//remove prototype since it is incompatible  with mootools
+	wp_deregister_script('prototype');//remove prototype since it is incompatible with mootools
 	wp_enqueue_script('pagemash_mootools', '/'.$pageMash_rel_dir.'nest-mootools.v1.11.js', false, false); //code is not compatible with other releases of moo
 	wp_enqueue_script('pagemash_nested', '/'.$pageMash_rel_dir.'nested.js', array('pagemash_mootools'), false);
 	wp_enqueue_script('pagemash_inlineEdit', '/'.$pageMash_rel_dir.'inlineEdit.v1.2.js', array('pagemash_mootools'), false);
 	wp_enqueue_script('pagemash', '/'.$pageMash_rel_dir.'pagemash.js', array('pagemash_mootools'), false);
 	add_action('admin_head', 'pageMash_add_css', 1);
-
+	
 }
 
 function pageMash_add_css(){
-	global $pageMash_abs_dir;
+	global $pageMash_abs_dir, $CollapsePagesOnLoad;
+	if($CollapsePagesOnLoad): ?>
+		<script type="text/javascript" charset="utf-8">
+			window.addEvent('domready', function(){ 
+				$ES('li','pageMash_pages').each(function(el) {
+					if(el.hasClass('children')) el.addClass('collapsed');
+				});
+			});
+		</script>
+	<?php endif;
 	?>
 <link rel="stylesheet" type="text/css" href="<?php echo $pageMash_abs_dir ?>pagemash.css" />
-<!--                     __  __           _     
-       WordPress Plugin |  \/  |         | |    
-  _ __   __ _  __ _  ___| \  / | __ _ ___| |__  
- | '_ \ / _` |/ _` |/ _ \ |\/| |/ _` / __| '_ \ 
- | |_) | (_| | (_| |  __/ |  | | (_| \__ \ | | |
- | .__/ \__,_|\__, |\___|_|  |_|\__,_|___/_| |_|
- | |           __/ |  Author: Joel Starnes
- |_|          |___/   URL: pagemash.joelstarnes.co.uk
+<!--                    __  __           _     
+      WordPress Plugin |  \/  |         | |    
+  _ __  __ _  __ _  ___| \  / | __ _ ___| |__  
+ | '_ \/ _` |/ _` |/ _ \ |\/| |/ _` / __| '_ \ 
+ | |_)  (_| | (_| |  __/ |  | | (_| \__ \ | | |
+ | .__/\__,_|\__, |\___|_|  |_|\__,_|___/_| |_|
+ | |          __/ |  Author: Joel Starnes
+ |_|         |___/   URL: pagemash.joelstarnes.co.uk
  
  >>pageMash Admin Page
 -->

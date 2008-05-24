@@ -150,26 +150,38 @@ window.addEvent('domready', function(){
 			e.stop();
 		});
 	});
+	
+	$('collapse_all').addEvent('click', function(e){ e = new Event(e);
+		$ES('li','pageMash_pages').each(function(el) {
+			if(el.hasClass('children')) el.addClass('collapsed');
+		});
+	e.stop(); });
+	
+	$('expand_all').addEvent('click', function(e){ e = new Event(e);
+		$ES('li','pageMash_pages').each(function(el) {
+			if(el.hasClass('children')) el.removeClass('collapsed');
+		});
+	e.stop(); });
 
 	/* disable drag text-selection for IE */
 	if (typeof document.body.onselectstart!="undefined")
 		document.body.onselectstart=function(){return false}
-
-/* InlineEdit: rename pages */
-$$('#pageMash_pages li span.title').each(function(el){ //#pageMash_pages li span.title
-	el.setStyle('cursor','pointer');
-	$E('a.rename', el.parentNode).addEvent('click',function(){
-		el.inlineEdit({
-			onStart:function(el){
-				 el.parentNode.addClass('renaming');
-			},
-			onComplete:function(el,oldContent,newContent){
-				el.parentNode.removeClass('renaming').addClass('renamed');
-				console.log("Page: '%s' has been RENAMED to: '%s'", oldContent, newContent);
-			}
+	
+	/* InlineEdit: rename pages */
+	$$('#pageMash_pages li span.title').each(function(el){ //#pageMash_pages li span.title
+		el.setStyle('cursor','pointer');
+		$E('a.rename', el.parentNode).addEvent('click',function(){
+			el.inlineEdit({
+				onStart:function(el){
+					 el.parentNode.addClass('renaming');
+				},
+				onComplete:function(el,oldContent,newContent){
+					el.parentNode.removeClass('renaming').addClass('renamed');
+					console.log("Page: '%s' has been RENAMED to: '%s'", oldContent, newContent);
+				}
+			});
 		});
 	});
-});
-
-console.info("We're all up and running.")
+	
+	console.info("We're all up and running.")
 }); /* close dom ready */

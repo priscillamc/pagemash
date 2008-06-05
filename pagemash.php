@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 1.1.2
+Version: 1.1.3
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
@@ -20,6 +20,7 @@ Release:		Date:			Description:
 1.1.0			24 Apr 2008		Added quick rename, externalised scripts, changed display of edit|hide|rename links, deregisters prototype
 1.1.1			29 Apr 2008		Fix a bug with console.log for safari, removed php code from js&css scripts to fix error
 1.1.2			24 May 2008		Added Expand all | Collapse all buttons
+1.1.3			04 Jun 2008		Fixed hide bug that appeared on some systems
 	
 */
 #########CONFIG OPTIONS############################################
@@ -78,13 +79,8 @@ function pageMash_getPages($post_parent){
 	
 	if ($pageposts == true){ //if $pageposts == true then it does have sub-page(s), so list them.
 		echo (0 === $post_parent) ? '<ul id="pageMash_pages">' : '<ul>'; //add this ID only to root 'ul' element
-		foreach ($pageposts as $page): //list pages, [the 'li' ID must be pm_'page ID']
-			if(get_option('exclude_pages')){ //need this for first time run when exclude_pages are undefined
-				if(in_array($page->ID, $excludePagesList))
-					$liClass="remove"; //if page is in exclude list, add class remove
-			}
-			?>
-			<li id="pm_<?php echo $page->ID;?>"<?php if($liClass) echo ' class="'.$liClass.'"'; ?>>
+		foreach ($pageposts as $page): //list pages, [the 'li' ID must be pm_'page ID'] ?>
+			<li id="pm_<?php echo $page->ID; ?>"<?php if(get_option('exclude_pages')){ if(in_array($page->ID, $excludePagesList)) echo ' class="remove"'; }//if page is in exclude list, add class remove ?>>
 				<span class="title"><?php echo $page->post_title;?></span>
 				<span class="pageMash_box">
 					<span class="pageMash_more">&raquo;</span>
@@ -116,7 +112,7 @@ function pageMash_main(){
 	<div id="debug_list"></div>
 	<div id="pageMash" class="wrap">
 		<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-		    version [1.1.2]
+		    version [1.1.3]
 		</div>
 		<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 		<p style="margin-top:4px;">

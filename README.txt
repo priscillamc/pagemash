@@ -3,7 +3,7 @@ Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
 Requires at least: 2.1
 Tested up to: 2.5
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 
 Organise page order and manage page structure with this simple drag-and-drop Ajax interface.
 
@@ -36,8 +36,13 @@ The code here is very simple and flexible, for more information look up `wp_list
 
 If you have any questions or comments, please drop me an email: http://joelstarnes.co.uk/contact
 
+= None of it's working =
+The most likely cause is that you have another plugin which has included an incompatible javascript library onto the pageMash admin page.
+
+Try opening up your WP admin and browse to your pageMash page, then take a look at the page source. Check if the prototype or scriptaculous scripts are included in the header. If so then the next step is to track down the offending plugin, which you can do by disabling each of your plugins in turn and checking when the scripts are no longer included.
+
 = Do I need any special code in my template =
-No. You no longer need to add the pageMash parameter as you did with the previous versions [<1.0.2]. You can leave the code in as it will do no harm, but it's a good idea to keep your template clean of unnecessary code.
+No. As of v1.0.2 you no longer need to add any code to your template. PageMash adds a filter to the wp_list_pages() function and will also work just fine with the pages widget.
 
 = Which browsers are supported =
 Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and Opera. (NB in IE7 you need to use the page name as a drag handle.)
@@ -50,6 +55,9 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
 
 
 ==Change Log==
+
+* 1.1.4
+ * Add config option to show debug info.
 
 * 1.1.3
  * Fixed hide bug that appeared on some systems

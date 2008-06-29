@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 1.1.3
+Version: 1.1.4
 Author URI: http://joelstarnes.co.uk/
 
 CHANGELOG:
@@ -21,6 +21,7 @@ Release:		Date:			Description:
 1.1.1			29 Apr 2008		Fix a bug with console.log for safari, removed php code from js&css scripts to fix error
 1.1.2			24 May 2008		Added Expand all | Collapse all buttons
 1.1.3			04 Jun 2008		Fixed hide bug that appeared on some systems
+1.1.4			05 Jun 2008		Add config option to show debug info.
 	
 */
 #########CONFIG OPTIONS############################################
@@ -35,6 +36,9 @@ $renamePagesFeature = true;  /*[deafult=true]*/
 
 $CollapsePagesOnLoad = false;  /*[deafult=true]*/
 /* Collapse all parent pages on load */
+
+$ShowDegubInfo = false;  /*[deafult=false]*/
+/* Show server response debug info */
 
 ###################################################################
 /*
@@ -106,10 +110,10 @@ function pageMash_getPages($post_parent){
 }
 
 function pageMash_main(){
-	global $excludePagesFeature, $excludePagesList;
+	global $excludePagesFeature, $excludePagesList, $ShowDegubInfo;
 	if(!is_array(get_option('exclude_pages'))) $excludePagesList=array(); else $excludePagesList = get_option('exclude_pages'); //if it's empty set as an empty array
 	?>
-	<div id="debug_list"></div>
+	<div id="debug_list"<?php if(false==$ShowDegubInfo) echo' style="display:none;"'; ?>></div>
 	<div id="pageMash" class="wrap">
 		<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
 		    version [1.1.3]

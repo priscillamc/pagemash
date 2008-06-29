@@ -52,7 +52,7 @@ var SaveList = function() {
 	new Ajax('../wp-content/plugins/pagemash/saveList.php', {
 		method: 'post',
 		postBody: 'm='+Json.toString(theDump), 
-		// update: "debug_list", 
+		update: "debug_list", 
 		onComplete: function() {
 			$('update_status').setText('Database Updated');
 			new Fx.Style($('update_status'), 'opacity', {duration: 500}).start(0,1).chain(function() {

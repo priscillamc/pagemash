@@ -4,24 +4,8 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 1.1.4
+Version: 1.1.5
 Author URI: http://joelstarnes.co.uk/
-
-CHANGELOG:
-Release:		Date:			Description:
-0.1.0			10 Feb 2008		Initial release
-0.1.1			12 Feb 2008		Minor fixes > Removed external include
-0.1.2			15 Feb 2008		Minor fixes > Fixed CSS&JS headers to only display on pagemash 
-1.0.0 beta		19 Feb 2008		Major update > 	Recusive page handles unlimited nested children, collapsable list items, interface makeover...
-1.0.1 beta		14 Mar 2008		Fixed IE > drag selects text
-1.0.2			16 Mar 2008		Major code rewrite for exclude pages, funct hooks onto wp_list_pages
-1.0.3			18 Mar 2008		Fixed datatype bug causing array problems
-1.0.4			11 Apr 2008		removed shorthand PHP and updated CSS and JS headers to admin_print_scripts hook.
-1.1.0			24 Apr 2008		Added quick rename, externalised scripts, changed display of edit|hide|rename links, deregisters prototype
-1.1.1			29 Apr 2008		Fix a bug with console.log for safari, removed php code from js&css scripts to fix error
-1.1.2			24 May 2008		Added Expand all | Collapse all buttons
-1.1.3			04 Jun 2008		Fixed hide bug that appeared on some systems
-1.1.4			05 Jun 2008		Add config option to show debug info.
 	
 */
 #########CONFIG OPTIONS############################################
@@ -67,9 +51,14 @@ Garrett Murphey - Page Link Manager [http://gmurphey.com/2006/10/05/wordpress-pl
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-//Global Vars
-$pageMash_rel_dir = 'wp-content/plugins/pagemash/';
-$pageMash_abs_dir = get_bloginfo('wpurl').'/'.$pageMash_rel_dir;
+// Pre-2.6 compatibility
+if ( !defined('WP_CONTENT_URL') )
+	define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
+if ( !defined('WP_CONTENT_DIR') )
+	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+// Guess the location
+$codeWord_path = WP_CONTENT_DIR.'/plugins/'.plugin_basename(dirname(__FILE__));
+$pageMash_url = WP_CONTENT_URL.'/plugins/'.plugin_basename(dirname(__FILE__));
 
 function pageMash_getPages($post_parent){
 	//this is a recurrsive function which calls itself to produce a nested list of elements
@@ -116,7 +105,7 @@ function pageMash_main(){
 	<div id="debug_list"<?php if(false==$ShowDegubInfo) echo' style="display:none;"'; ?>></div>
 	<div id="pageMash" class="wrap">
 		<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-		    version [1.1.4]
+		    version [1.1.5]
 		</div>
 		<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
 		<p style="margin-top:4px;">
@@ -152,19 +141,25 @@ function pageMash_main(){
 
 function pageMash_head(){
 	//stylesheet & javascript to go in page header
-	global $pageMash_rel_dir, $CollapsePagesOnLoad;
+	global $pageMash_url, $CollapsePagesOnLoad;
 	
 	wp_deregister_script('prototype');//remove prototype since it is incompatible with mootools
-	wp_enqueue_script('pagemash_mootools', '/'.$pageMash_rel_dir.'nest-mootools.v1.11.js', false, false); //code is not compatible with other releases of moo
-	wp_enqueue_script('pagemash_nested', '/'.$pageMash_rel_dir.'nested.js', array('pagemash_mootools'), false);
-	wp_enqueue_script('pagemash_inlineEdit', '/'.$pageMash_rel_dir.'inlineEdit.v1.2.js', array('pagemash_mootools'), false);
-	wp_enqueue_script('pagemash', '/'.$pageMash_rel_dir.'pagemash.js', array('pagemash_mootools'), false);
+	wp_enqueue_script('pagemash_mootools', $pageMash_url.'/nest-mootools.v1.11.js', false, false); //code is not compatible with other releases of moo
+	wp_enqueue_script('pagemash_nested', $pageMash_url.'/nested.js', array('pagemash_mootools'), false);
+	wp_enqueue_script('pagemash_inlineEdit', $pageMash_url.'/inlineEdit.v1.2.js', array('pagemash_mootools'), false);
+	wp_enqueue_script('pagemash', $pageMash_url.'/pagemash.js', array('pagemash_mootools'), false);
 	add_action('admin_head', 'pageMash_add_css', 1);
+	if(function_exists('wp_enqueue_style')){
+		// wp_enqueue_style('pagemash','/wp-content/plugins/pagemash/pagemash.css', array(), '1.0');
+		// $styles->add('codeword', $pageMash_url.'/pagemash.css');	
+		// wp_enqueue_style('codeword', $pageMash_url.'/pagemash.css', array(), '1.0');
+		// wp_enqueue_style('codeword');
+	}
 	
 }
 
 function pageMash_add_css(){
-	global $pageMash_abs_dir, $CollapsePagesOnLoad;
+	global $pageMash_url, $CollapsePagesOnLoad;
 	if($CollapsePagesOnLoad): ?>
 		<script type="text/javascript" charset="utf-8">
 			window.addEvent('domready', function(){ 
@@ -174,8 +169,9 @@ function pageMash_add_css(){
 			});
 		</script>
 	<?php endif;
-	?>
-<link rel="stylesheet" type="text/css" href="<?php echo $pageMash_abs_dir ?>pagemash.css" />
+	// if(!function_exists('wp_enqueue_style')) // Pre-2.6 compatibility
+		printf('<link rel="stylesheet" type="text/css" href="%s/pagemash.css" />', $pageMash_url);
+	// ?>
 <!--                    __  __           _     
       WordPress Plugin |  \/  |         | |    
   _ __  __ _  __ _  ___| \  / | __ _ ___| |__  

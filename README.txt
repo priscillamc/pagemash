@@ -2,8 +2,8 @@
 Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
 Requires at least: 2.1
-Tested up to: 2.5
-Stable tag: 1.1.4
+Tested up to: 2.6
+Stable tag: 1.1.5
 
 Organise page order and manage page structure with this simple drag-and-drop Ajax interface.
 
@@ -55,59 +55,61 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
 
 
 ==Change Log==
+= 1.1.5 =
+ - Updated for WP 2.6
 
-* 1.1.4
- * Add config option to show debug info.
+= 1.1.4 =
+ - Add config option to show debug info.
 
-* 1.1.3
- * Fixed hide bug that appeared on some systems
+= 1.1.3 =
+ - Fixed hide bug that appeared on some systems
 
-* 1.1.2
- * Added Expand all | Collapse all buttons
+= 1.1.2 =
+ - Added Expand all | Collapse all buttons
 
-* 1.1.1
- * Fix a bug with console.log for safari
- * Removed php code from js&css scripts to fix error
+= 1.1.1 =
+ - Fix a bug with console.log for safari
+ - Removed php code from js&css scripts to fix error
 
-* 1.1.0
- * Added quick rename
- * Externalised scripts
- * Changed display of edit|hide|rename links
- * Deregisters prototypes
+= 1.1.0 =
+ - Added quick rename
+ - Externalised scripts
+ - Changed display of edit|hide|rename links
+ - Deregisters prototypes
  
-* 1.0.4
- * Removed shorthand PHP
- * Updated CSS and JS headers to admin_print_scripts hook.
+= 1.0.4 =
+ - Removed shorthand PHP
+ - Updated CSS and JS headers to admin_print_scripts hook.
  
-* 1.0.3
- * Fixed datatype bug causing array problems
+= 1.0.3 =
+ - Fixed datatype bug causing array problems
  
-* 1.0.3
- * Fixed datatype bug causing array problems
+= 1.0.3 =
+ - Fixed datatype bug causing array problems
  
-* 1.0.2
- * Major code rewrite for exclude pages
+= 1.0.2 =
+ - Major code rewrite for exclude pages
  
-* 1.0.1 beta
- * fixed IE drag selects text
+= 1.0.1 beta =
+ - fixed IE drag selects text =
  
-* 1.0.0 beta
- * Major rebuild to use vladimir's sortables class extension
- * Recusive page handles unlimited nested children
- * Collapsable list items
- * Interface makeover...
+= 1.0.0 beta =
+ - Major rebuild to use vladimir's sortables class extension
+ - Recusive page handles unlimited nested children
+ - Collapsable list items
+ - Interface makeover...
  
-* 0.1.3
- * Fixed exclude pages feature
+= 0.1.3 =
+ - Fixed exclude pages feature
  
-* 0.1.2
- * Fixed CSS&JS headers to only display on pageMash admin
+= 0.1.2 =
+ - Fixed CSS&JS headers to only display on pageMash admin
  
-* 0.1.1
- * Removed version check since some hosts will not allow external includes.
+= 0.1.1 =
+ - Removed version check since some hosts will not allow external includes.
  
-* 0.1.0
- * Initial Release
+= 0.1.0 =
+ - Initial Release
 
 == Localization ==
 

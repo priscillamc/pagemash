@@ -14,9 +14,15 @@
 if(!$_POST['m']) die('no data'); //die if no data is sent
 error_reporting(E_ALL);
 require_once('myjson.php'); //JSON decode lib
-//require_once('./../../../wp-config.php');  //config to connect to database
-  include_once "../../../wp-config.php";
-  include_once "../../../wp-settings.php";
+  
+$root = dirname(dirname(dirname(dirname(__FILE__))));
+if (file_exists($root.'/wp-load.php')) {
+	require_once($root.'/wp-load.php');
+} else {
+	// Pre-2.6 compatibility
+	require_once($root.'/wp-config.php');
+	require_once($root.'/wp-settings.php');
+}
 
 global $wpdb, $excludePages;
 $excludePages = array();

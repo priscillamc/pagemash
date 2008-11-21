@@ -45,11 +45,11 @@ Ajax = Ajax.extend({
 	}
 });
 /* function to retrieve list data and send to server in JSON format */
-var SaveList = function() {
+var saveList = function() {
 	var theDump = sortIt.serialize();
 	console.group('Database Update');
 	console.time('Update Chronometer');
-	new Ajax('../wp-content/plugins/pagemash/saveList.php', {
+	new Ajax('../wp-content/plugins/pagemash/savelist.php', {
 		method: 'post',
 		postBody: 'm='+Json.toString(theDump), 
 		update: "debug_list", 
@@ -116,7 +116,7 @@ window.addEvent('domready', function(){
 		
 	$('pageMash_submit').addEvent('click', function(e){
 		e = new Event(e);
-		SaveList();
+		saveList();
 		e.stop();
 	});
 

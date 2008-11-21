@@ -146,7 +146,7 @@ function pageMash_head(){
 	wp_deregister_script('prototype');//remove prototype since it is incompatible with mootools
 	wp_enqueue_script('pagemash_mootools', $pageMash_url.'/nest-mootools.v1.11.js', false, false); //code is not compatible with other releases of moo
 	wp_enqueue_script('pagemash_nested', $pageMash_url.'/nested.js', array('pagemash_mootools'), false);
-	wp_enqueue_script('pagemash_inlineEdit', $pageMash_url.'/inlineEdit.v1.2.js', array('pagemash_mootools'), false);
+	wp_enqueue_script('pagemash_inline_edit', $pageMash_url.'/inline-edit.v1.2.js', array('pagemash_mootools'), false);
 	wp_enqueue_script('pagemash', $pageMash_url.'/pagemash.js', array('pagemash_mootools'), false);
 	add_action('admin_head', 'pageMash_add_css', 1);
 	if(function_exists('wp_enqueue_style')){

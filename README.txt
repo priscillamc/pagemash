@@ -3,7 +3,7 @@ Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
 Requires at least: 2.1
 Tested up to: 2.6
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 
 Organise page order and manage page structure with this simple drag-and-drop Ajax interface.
 
@@ -55,6 +55,9 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
 
 
 ==Change Log==
+= 1.1.6 =
+ - Corrected filename case.
+ 
 = 1.1.5 =
  - Updated for WP 2.6
 

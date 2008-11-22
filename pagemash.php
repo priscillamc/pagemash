@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
 Author: Joel Starnes
-Version: 1.1.5
+Version: 1.1.6
 Author URI: http://joelstarnes.co.uk/
 	
 */

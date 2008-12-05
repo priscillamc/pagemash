@@ -2,7 +2,7 @@
 Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
 Requires at least: 2.1
-Tested up to: 2.6
+Tested up to: 2.7
 Stable tag: 1.1.6
 
 Organise page order and manage page structure with this simple drag-and-drop Ajax interface.

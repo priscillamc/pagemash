@@ -2,7 +2,7 @@
 /*
 Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
-Description: Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows for quick sorting, hiding and organising of page parenting structure in a simple intuative manner.
+Description: Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows quick sorting, hiding and organising of page structure.
 Author: Joel Starnes
 Version: 1.2.0
 Author URI: http://joelstarnes.co.uk/

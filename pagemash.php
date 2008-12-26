@@ -2,9 +2,9 @@
 /*
 Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
-Description: pageMash > pageManagement  [WP_Admin > Manage > pageMash]
+Description: Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows for quick sorting, hiding and organising of page parenting structure in a simple intuative manner.
 Author: Joel Starnes
-Version: 1.1.6
+Version: 1.2.0
 Author URI: http://joelstarnes.co.uk/
 	
 */
@@ -23,7 +23,6 @@ $CollapsePagesOnLoad = false;  /*[deafult=true]*/
 
 $ShowDegubInfo = false;  /*[deafult=false]*/
 /* Show server response debug info */
-
 ###################################################################
 /*
 INSPIRATIONS/CREDITS:
@@ -57,8 +56,11 @@ if ( !defined('WP_CONTENT_URL') )
 if ( !defined('WP_CONTENT_DIR') )
 	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 // Guess the location
-$codeWord_path = WP_CONTENT_DIR.'/plugins/'.plugin_basename(dirname(__FILE__));
+$pageMash_path = WP_CONTENT_DIR.'/plugins/'.plugin_basename(dirname(__FILE__));
 $pageMash_url = WP_CONTENT_URL.'/plugins/'.plugin_basename(dirname(__FILE__));
+
+// load localisation files
+load_plugin_textdomain('pmash','wp-content/plugins/pagemash/');
 
 function pageMash_getPages($post_parent){
 	//this is a recurrsive function which calls itself to produce a nested list of elements
@@ -79,12 +81,12 @@ function pageMash_getPages($post_parent){
 					<span class="pageMash_more">&raquo;</span>
 					<span class="pageMash_pageFunctions">
 						id:<?php echo $page->ID;?>
-						[<a href="<?php echo get_bloginfo('wpurl').'/wp-admin/post.php?action=edit&post='.$page->ID; ?>" title="Edit This Page">edit</a>]
+						[<a href="<?php echo get_bloginfo('wpurl').'/wp-admin/post.php?action=edit&post='.$page->ID; ?>" title="<?php _e('Edit This Page'); ?>"><?php _e('edit'); ?></a>]
 						<?php if($excludePagesFeature): ?>
-							[<a href="#" title="Show|Hide" class="excludeLink" onclick="toggleRemove(this); return false">hide</a>]
+							[<a href="#" title="<?php _e('Show|Hide'); ?>" class="excludeLink" onclick="toggleRemove(this); return false"><?php _e('hide') ?></a>]
 						<?php endif; ?>
 						<?php if($renamePagesFeature): ?>
-							[<a href="#" title="Rename Page" class="rename">Rename</a>]
+							[<a href="#" title="<?php _e('Rename Page'); ?>" class="rename"><?php _e('Rename'); ?></a>]
 						<?php endif; ?>
 					</span>
 				</span>
@@ -105,35 +107,35 @@ function pageMash_main(){
 	<div id="debug_list"<?php if(false==$ShowDegubInfo) echo' style="display:none;"'; ?>></div>
 	<div id="pageMash" class="wrap">
 		<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-		    version [1.1.6]
+		    version [1.2.0]
 		</div>
-		<h2 style="margin-bottom:0; clear:none;">pageMash - pageManagement</h2>
+		<h2 style="margin-bottom:0; clear:none;"><?php _e('pageMash - pageManagement     ','pmash');?></h2>
 		<p style="margin-top:4px;">
-			Just drag the pages <strong>up</strong> or <strong>down</strong> to change the page order and <strong>left</strong> or <strong>right</strong> to change the page's parent, then hit 'update'.<br />
-			The icon to the left of each page shows if it has child pages, <strong>double click</strong> on that item to toggle <strong>expand|collapse</strong> of it's children.
+			<?php _e('Just drag the pages <strong>up</strong> or <strong>down</strong> to change the page order and <strong>left</strong> or <strong>right</strong> to change the page`s parent, then hit "update".     ','pmash');?> <br />
+			<?php _e('The icon to the left of each page shows if it has child pages, <strong>double click</strong> on that item to toggle <strong>expand|collapse</strong> of it`s children.     ','pmash');?> <br />           
 		</p>
-		<p><a href="#" id="expand_all">Expand All</a> | <a href="#" id="collapse_all">Collapse All</a></p>
+		<p><a href="#" id="expand_all"><?php _e('Expand All     ','pmash');?></a> | <a href="#" id="collapse_all"><?php _e('Collapse All     ','pmash');?></a></p>
 		
 		<?php pageMash_getPages(0); //pass 0, as initial parent ?>
 		
 		<p class="submit">
 			<div id="update_status" style="float:left; margin-left:40px; opacity:0;"></div>
-				<input type="submit" id="pageMash_submit" tabindex="2" style="font-weight: bold; float:right;" value="Update" name="submit"/>
+				<input type="submit" id="pageMash_submit" tabindex="2" style="font-weight: bold; float:right;" value=<?php _e('Update        ','pmash');?> name="submit"/>
 		</p>
 		<br style="margin-bottom: .8em;" />
 	</div>
 
 	<div class="wrap" style="width:160px; margin-bottom:0; padding:0;"><p><a href="#" id="pageMashInfo_toggle">Show|Hide Further Info</a></p></div>
 	<div class="wrap" id="pageMashInfo" style="margin-top:-1px;">
-		<h2>How to Use</h2>
-		<p>pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar [WP admin page > Presentation > Widgets]. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.</p>
-		<p>You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you're using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top level pages). The code should look something like the following:</p>
+		<h2><?php _e('How to Use     ','pmash');?></h2>
+		<p><?php _e('pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar \'WP admin page \> Presentation \> Widgets\'. Click the configure button on the widget and ensure that \'sort by\' is set to \'page order\'. Hey presto, you\'re done.     ','pmash');?></p>
+		<p><?php _e('You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you\'re using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top level pages). The code should look something like the following:','pmash');?></p>
 		<p style="margin-bottom:0; font-weight:bold;">Code:</p>
 		<code id="pageMash_code">
 			<span class="white">&lt;?php</span> <span class="blue">wp_list_pages(</span><span class="orange">'title_li=&lt;h2&gt;Pages&lt;/h2&gt;&amp;depth=0'</span><span class="blue">);</span> <span class="white">?&gt;</span>
 		</code>
-		<p>You can also hard-code pages to exclude and these will be merged with the pages you set to exclude in your pageMash admin.</p>
-		<p>The code here is very simple and flexible, for more information look up <a href="http://codex.wordpress.org/Template_Tags/wp_list_pages" title="wp_list_pages Documentation">wp_list_pages() in the Wordpress Codex</a> as it is very well documented and if you have any further questions or feedback I like getting messages, so <a href="http://joelstarnes.co.uk/contact/" title="email Joel Starnes">drop me an email</a>.</p>
+		<p><?php _e('You can also hard-code pages to exclude and these will be merged with the pages you set to exclude in your pageMash admin.','pmash');?></p>
+		<p><?php _e('The code here is very simple and flexible, for more information look up <a href="http://codex.wordpress.org/Template_Tags/wp_list_pages" title="wp_list_pages Documentation">wp_list_pages() in the Wordpress Codex</a> as it is very well documented and if you have any further questions or feedback I like getting messages, so <a href="http://joelstarnes.co.uk/contact/" title="email Joel Starnes">drop me an email</a>.','pmash');?></p>
 		<br />
 	</div>
 	<?php
@@ -196,9 +198,13 @@ function pageMash_add_excludes($excludes){
 }
 
 function pageMash_add_pages(){
-	//add link in the management tab
+	//add menu link
 	global $minlevel;
-	$page = add_management_page('pageMash page order', 'pageMash', $minlevel, __FILE__, 'pageMash_main');
+	if($wp_version >= 2.7){
+		$page = add_submenu_page('edit-pages.php', 'pageMash page order', __('pageMash          ','pmash'), $minlevel,  __FILE__, 'pageMash_main'); 
+	}else{
+		$page = add_management_page('pageMash page order', 'pageMash', $minlevel, __FILE__, 'pageMash_main');
+	}
 	add_action("admin_print_scripts-$page", 'pageMash_head'); //add css styles and JS code to head
 }
 

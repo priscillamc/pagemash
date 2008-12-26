@@ -3,13 +3,13 @@ Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
 Requires at least: 2.1
 Tested up to: 2.7
-Stable tag: 1.1.6
+Stable tag: 1.2.0
 
-Organise page order and manage page structure with this simple drag-and-drop Ajax interface.
+Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows for quick sorting, hiding and organising of page parenting structure in a simple intuative manner.
 
 == Description ==
 
-Customise the order your pages are listed in and manage the parent structure with this simple Ajax drag-and-drop administrative interface with an option to toggle the page to be hidden from output. Great tool to quickly re-arrange your page menus.
+Customise the order your pages are listed in and manage the parent structure with this simple ajax drag-and-drop administrative interface with an option to toggle the page to be hidden from output. Great tool to quickly re-arrange your page menus.
 
 Checkout the example page: http://joelstarnes.co.uk/pagemash/example
 Feedback is greatly appreciated: http://joelstarnes.co.uk/contact
@@ -21,7 +21,7 @@ Feedback is greatly appreciated: http://joelstarnes.co.uk/contact
 1. Activate in 'Plugins' admin menu
 1. Then have fun..
 
-pageMash works with the `wp_list_pages` function. The easiest way to use it is to put the pages widget in your sidebar [WP admin page > Presentation > Widgets]. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.
+pageMash works with the `wp_list_pages` function. The easiest way to use it is to put the pages widget in your sidebar. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.
 
 You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you're using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top levle pages). The code should look something like the following:
 
@@ -49,12 +49,18 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
 
 == Screenshots ==
 
-1. Admin Interface
+1. Admin Interface.
 
-2. Setting up the page widget. [WP-Admin > Presentation > Widgets]
+2. Setting up the page widget in the old WP admin.
 
 
 ==Change Log==
+= 1.2.0 =
+ - Introduces multi-lingual support.
+ - Adds German translation
+ - Moves pageMash into the Pages menu for WP2.7
+ - All thanks to Tom [www.outsourcetoasia.de]
+
 = 1.1.6 =
  - Corrected filename case.
  
@@ -116,4 +122,8 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
 
 == Localization ==
 
-Currently only available in english.
+= pageMash is available in: =
+ - English
+ - German :: courtesy of Tom [www.outsourcetoasia.de]
+
+If you'd like to translate pageMash into your own language get in touch and I'll be happy to add it in.

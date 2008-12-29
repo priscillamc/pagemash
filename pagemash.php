@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows quick sorting, hiding and organising of page structure.
 Author: Joel Starnes
-Version: 1.2.1
+Version: 1.2.2
 Author URI: http://joelstarnes.co.uk/
 	
 */
@@ -162,15 +162,22 @@ function pageMash_head(){
 
 function pageMash_add_css(){
 	global $pageMash_url, $CollapsePagesOnLoad;
-	if($CollapsePagesOnLoad): ?>
-		<script type="text/javascript" charset="utf-8">
+	?>
+	<script type="text/javascript" charset="utf-8">
+		<?php if($CollapsePagesOnLoad): ?>
 			window.addEvent('domready', function(){ 
 				$ES('li','pageMash_pages').each(function(el) {
 					if(el.hasClass('children')) el.addClass('collapsed');
 				});
 			});
-		</script>
-	<?php endif;
+		<?php endif; ?>
+		window.pmash = {
+			"update": "Database Updated",
+			"showInfo": "Show Further Info Poo",
+			"hideInfo": "Hide Further Info"
+		}
+	</script>
+	<?php
 	// if(!function_exists('wp_enqueue_style')) // Pre-2.6 compatibility
 		printf('<link rel="stylesheet" type="text/css" href="%s/pagemash.css" />', $pageMash_url);
 	// ?>

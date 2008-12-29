@@ -54,7 +54,7 @@ var saveList = function() {
 		postBody: 'm='+Json.toString(theDump), 
 		update: "debug_list", 
 		onComplete: function() {
-			$('update_status').setText('Database Updated');
+			$('update_status').setText(window.pmash.update);
 			new Fx.Style($('update_status'), 'opacity', {duration: 500}).start(0,1).chain(function() {
 				new Fx.Style($('update_status'), 'opacity', {duration: 1500}).start(1,0);
 			});
@@ -127,15 +127,15 @@ window.addEvent('domready', function(){
 		e.stop();
 		switch($('pageMashInfo_toggle').getText()) {
 			case "Show Further Info":
-				$('pageMashInfo_toggle').setText('Hide Further Info');
+				$('pageMashInfo_toggle').setText(window.pmash.hideInfo);
 			  break    
 			case "Hide Further Info":
-				$('pageMashInfo_toggle').setText('Show Further Info');
+				$('pageMashInfo_toggle').setText(window.pmash.showInfo);
 			  break
 		}
 	});
 	pageMashInfo.hide();
-	$('pageMashInfo_toggle').setText('Show Further Info');
+	$('pageMashInfo_toggle').setText(window.pmash.showInfo);
 	
 	
 	/* loop through each page */

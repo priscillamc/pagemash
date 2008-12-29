@@ -4,7 +4,7 @@ Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows quick sorting, hiding and organising of page structure.
 Author: Joel Starnes
-Version: 1.2.0
+Version: 1.2.1
 Author URI: http://joelstarnes.co.uk/
 	
 */
@@ -199,7 +199,7 @@ function pageMash_add_excludes($excludes){
 
 function pageMash_add_pages(){
 	//add menu link
-	global $minlevel;
+	global $minlevel, $wp_version;
 	if($wp_version >= 2.7){
 		$page = add_submenu_page('edit-pages.php', 'pageMash page order', __('pageMash          ','pmash'), $minlevel,  __FILE__, 'pageMash_main'); 
 	}else{

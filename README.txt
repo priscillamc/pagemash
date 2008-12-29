@@ -3,7 +3,7 @@ Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
 Requires at least: 2.1
 Tested up to: 2.7
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 
 Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows for quick sorting, hiding and organising of page parenting structure in a simple intuative manner.
 
@@ -55,6 +55,9 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
 
 
 ==Change Log==
+= 1.2.1 =
+ - fix for menu position in WP2.7
+
 = 1.2.0 =
  - Introduces multi-lingual support.
  - Adds German translation

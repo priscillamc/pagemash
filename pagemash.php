@@ -172,9 +172,9 @@ function pageMash_add_css(){
 			});
 		<?php endif; ?>
 		window.pmash = {
-			"update": "Database Updated",
-			"showInfo": "Show Further Info Poo",
-			"hideInfo": "Hide Further Info"
+			"update": "<?php _e('Database Updated') ?>",
+			"showInfo": "<?php _e('Show Further Info') ?>",
+			"hideInfo": "<?php _e('Hide Further Info') ?>"
 		}
 	</script>
 	<?php

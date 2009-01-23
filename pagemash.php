@@ -107,7 +107,7 @@ function pageMash_main(){
 	<div id="debug_list"<?php if(false==$ShowDegubInfo) echo' style="display:none;"'; ?>></div>
 	<div id="pageMash" class="wrap">
 		<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-		    version [1.2.0]
+		    version [1.2.2]
 		</div>
 		<h2 style="margin-bottom:0; clear:none;"><?php _e('pageMash - pageManagement     ','pmash');?></h2>
 		<p style="margin-top:4px;">

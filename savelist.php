@@ -24,7 +24,7 @@ if (file_exists($root.'/wp-load.php')) {
 	require_once($root.'/wp-settings.php');
 }
 
-global $wpdb, $excludePages;
+global $wpdb, $excludePages, $wp_rewrite;
 $excludePages = array();
 
 // fetch JSON object from $_POST['m']
@@ -59,6 +59,9 @@ function saveList($parent, $children) {
 	$i++;
 	}
 }
+
+$wp_rewrite->flush_rules();
+
 echo "Update Pages: \n";
 echo saveList(0, $aMenu);
 $wpdb->print_error();

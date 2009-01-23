@@ -3,7 +3,7 @@ Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
 Requires at least: 2.1
 Tested up to: 2.7
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 
 Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows for quick sorting, hiding and organising of page parenting structure in a simple intuative manner.
 
@@ -21,7 +21,7 @@ Feedback is greatly appreciated: http://joelstarnes.co.uk/contact
 1. Activate in 'Plugins' admin menu
 1. Then have fun..
 
-pageMash works with the `wp_list_pages` function. The easiest way to use it is to put the pages widget in your sidebar. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.
+pageMash works with the `wp_list_pages` function. The easiest way to use it is to put the standard WordPress pages widget in your sidebar. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.
 
 You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you're using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top levle pages). The code should look something like the following:
 
@@ -55,6 +55,11 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
 
 
 ==Change Log==
+= 1.2.2 =
+ - Additional multi-lingual support
+ - Adds turkish translation ~ by Ömer Faruk [ramerta.com]
+ - Fix permalinks by flushing the rewrite rules after updates ~ thanks Alexey ;)
+
 = 1.2.1 =
  - fix for menu position in WP2.7
 

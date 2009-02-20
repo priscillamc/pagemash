@@ -54,9 +54,9 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
 2. Setting up the page widget in the old WP admin.
 
 
-==Change Log==
+== Change Log ==
 = 1.3.0 =
- - Important core fix ~ good call Alex!
+ - Important core fix ~ huge thanks to Alex Günsche [www.zirona.com]
  - Pages show 'draft' and 'pending review' tags
  - Fix for nested sorting bug in safari
 

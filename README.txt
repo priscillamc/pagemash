@@ -59,6 +59,7 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
  - Important core fix ~ huge thanks to Alex Günsche [www.zirona.com]
  - Pages show 'draft' and 'pending review' tags
  - Fix for nested sorting bug in safari
+ - Danish translation ~ by Georg S. Adamsen [wordpress.blogos.dk]
 
 = 1.2.2 =
  - Additional multi-lingual support

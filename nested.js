@@ -210,7 +210,13 @@ var Nested = new Class({
 			sub = (sub > 0) ? sub-over.getTop() : over.offsetHeight;
 			abort += (event.page.y < (sub-el.offsetHeight)+over.getTop());
 			if (!abort) {
-				if (move == 'inside') dest = new Element(this.options.parentTag).injectInside(dest);
+				if (move == 'inside') {
+					if(dest.getElement(this.options.parentTag)) {
+						dest = dest.getElement(this.options.parentTag);
+					} else {
+						dest = new Element(this.options.parentTag).injectInside(dest);
+					}
+				}
 				$(el).inject(dest, move);
 				el.moved = true;
 				if (!prevParent.getFirst()) prevParent.remove();

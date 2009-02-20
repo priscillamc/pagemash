@@ -29,7 +29,7 @@ msgid "The icon to the left of each page shows if it has child pages, <strong>do
 msgstr "Eğer bir iconun üzerinde + işareti görünüyorsa, bu, o sayfanın alt sayfaları var anlamına gelir, Alt sayfalarını görmek için veya kapatmak için o sayfanın iconuna <strong>çift tıklayın</strong>. Hepsini açıp kapatmak için tıkla <strong>Hepsini Aç/Hepsini Kapat</strong> seçeneklerine tıklayın."
 
 #: pagemash.php:118
-msgid "Expand All     "
+msgid "Expand All"
 msgstr "Hepsini Aç"
 
 #: pagemash.php:118
@@ -45,8 +45,8 @@ msgid "How to Use     "
 msgstr "Nasıl Kullanılır"
 
 #: pagemash.php:132
-msgid "pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar 'WP admin page \\> Presentation \\> Widgets'. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.     "
-msgstr "pageMash. wp_list_pages function ile birlikte çalışmaktadır. Yan menüde bu eklentiyi kullanmanın kolay yolu şu 'WP Admin Sayfası\\> Görünüm \\> Bileşenler'. Ayarlar butonuna tıkla ve 'sort by' kısmını 'sayfa düzenine' ayarla ve olduğunu garantiye al."
+msgid "pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar [WP admin page > Appeaarance > Widgets]. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.     "
+msgstr "pageMash. wp_list_pages function ile birlikte çalışmaktadır. Yan menüde bu eklentiyi kullanmanın kolay yolu şu 'WP Admin Sayfası > Görünüm > Bileşenler'. Ayarlar butonuna tıkla ve 'sort by' kısmını 'sayfa düzenine' ayarla ve olduğunu garantiye al."
 
 #: pagemash.php:133
 msgid "You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you're using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top level pages). The code should look something like the following:"

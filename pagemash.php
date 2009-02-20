@@ -2,9 +2,9 @@
 /*
 Plugin Name: pageMash
 Plugin URI: http://joelstarnes.co.uk/pagemash/
-Description: Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows quick sorting, hiding and organising of page structure.
+Description: Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows quick sorting, hiding and organising of parenting.
 Author: Joel Starnes
-Version: 1.2.2
+Version: 1.3.0
 Author URI: http://joelstarnes.co.uk/
 	
 */
@@ -75,8 +75,10 @@ function pageMash_getPages($post_parent){
 	if ($pageposts == true){ //if $pageposts == true then it does have sub-page(s), so list them.
 		echo (0 === $post_parent) ? '<ul id="pageMash_pages">' : '<ul>'; //add this ID only to root 'ul' element
 		foreach ($pageposts as $page): //list pages, [the 'li' ID must be pm_'page ID'] ?>
+			<?php $status = $page->post_status; ?>
 			<li id="pm_<?php echo $page->ID; ?>"<?php if(get_option('exclude_pages')){ if(in_array($page->ID, $excludePagesList)) echo ' class="remove"'; }//if page is in exclude list, add class remove ?>>
 				<span class="title"><?php echo $page->post_title;?></span>
+				<?php if ($status == 'draft' || $status == 'pending') { print ' <span class="pm_status">('.__($status).')</span>'; } ?>
 				<span class="pageMash_box">
 					<span class="pageMash_more">&raquo;</span>
 					<span class="pageMash_pageFunctions">
@@ -107,14 +109,14 @@ function pageMash_main(){
 	<div id="debug_list"<?php if(false==$ShowDegubInfo) echo' style="display:none;"'; ?>></div>
 	<div id="pageMash" class="wrap">
 		<div id="pageMash_checkVersion" style="float:right; font-size:.7em; margin-top:5px;">
-		    version [1.2.2]
+		    version [1.3.0]
 		</div>
 		<h2 style="margin-bottom:0; clear:none;"><?php _e('pageMash - pageManagement     ','pmash');?></h2>
 		<p style="margin-top:4px;">
 			<?php _e('Just drag the pages <strong>up</strong> or <strong>down</strong> to change the page order and <strong>left</strong> or <strong>right</strong> to change the page`s parent, then hit "update".     ','pmash');?> <br />
 			<?php _e('The icon to the left of each page shows if it has child pages, <strong>double click</strong> on that item to toggle <strong>expand|collapse</strong> of it`s children.     ','pmash');?> <br />           
 		</p>
-		<p><a href="#" id="expand_all"><?php _e('Expand All     ','pmash');?></a> | <a href="#" id="collapse_all"><?php _e('Collapse All     ','pmash');?></a></p>
+		<p><a href="#" id="expand_all"><?php _e('Expand All','pmash');?></a> | <a href="#" id="collapse_all"><?php _e('Collapse All     ','pmash');?></a></p>
 		
 		<?php pageMash_getPages(0); //pass 0, as initial parent ?>
 		
@@ -128,7 +130,7 @@ function pageMash_main(){
 	<div class="wrap" style="width:160px; margin-bottom:0; padding:0;"><p><a href="#" id="pageMashInfo_toggle">Show|Hide Further Info</a></p></div>
 	<div class="wrap" id="pageMashInfo" style="margin-top:-1px;">
 		<h2><?php _e('How to Use     ','pmash');?></h2>
-		<p><?php _e('pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar \'WP admin page \> Presentation \> Widgets\'. Click the configure button on the widget and ensure that \'sort by\' is set to \'page order\'. Hey presto, you\'re done.     ','pmash');?></p>
+		<p><?php _e('pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar [WP admin page > Appeaarance > Widgets]. Click the configure button on the widget and ensure that \'sort by\' is set to \'page order\'. Hey presto, you\'re done.     ','pmash');?></p>
 		<p><?php _e('You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you\'re using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top level pages). The code should look something like the following:','pmash');?></p>
 		<p style="margin-bottom:0; font-weight:bold;">Code:</p>
 		<code id="pageMash_code">
@@ -151,13 +153,6 @@ function pageMash_head(){
 	wp_enqueue_script('pagemash_inline_edit', $pageMash_url.'/inline-edit.v1.2.js', array('pagemash_mootools'), false);
 	wp_enqueue_script('pagemash', $pageMash_url.'/pagemash.js', array('pagemash_mootools'), false);
 	add_action('admin_head', 'pageMash_add_css', 1);
-	if(function_exists('wp_enqueue_style')){
-		// wp_enqueue_style('pagemash','/wp-content/plugins/pagemash/pagemash.css', array(), '1.0');
-		// $styles->add('codeword', $pageMash_url.'/pagemash.css');	
-		// wp_enqueue_style('codeword', $pageMash_url.'/pagemash.css', array(), '1.0');
-		// wp_enqueue_style('codeword');
-	}
-	
 }
 
 function pageMash_add_css(){
@@ -178,9 +173,8 @@ function pageMash_add_css(){
 		}
 	</script>
 	<?php
-	// if(!function_exists('wp_enqueue_style')) // Pre-2.6 compatibility
-		printf('<link rel="stylesheet" type="text/css" href="%s/pagemash.css" />', $pageMash_url);
-	// ?>
+	printf('<link rel="stylesheet" type="text/css" href="%s/pagemash.css" />', $pageMash_url);
+	?>
 <!--                    __  __           _     
       WordPress Plugin |  \/  |         | |    
   _ __  __ _  __ _  ___| \  / | __ _ ___| |__  
@@ -208,9 +202,9 @@ function pageMash_add_pages(){
 	//add menu link
 	global $minlevel, $wp_version;
 	if($wp_version >= 2.7){
-		$page = add_submenu_page('edit-pages.php', 'pageMash page order', __('pageMash          ','pmash'), $minlevel,  __FILE__, 'pageMash_main'); 
+		$page = add_submenu_page('edit-pages.php', 'pageMash: Page Management', __('pageMash          ','pmash'), $minlevel,  __FILE__, 'pageMash_main'); 
 	}else{
-		$page = add_management_page('pageMash page order', 'pageMash', $minlevel, __FILE__, 'pageMash_main');
+		$page = add_management_page('pageMash: Page Management', 'pageMash', $minlevel, __FILE__, 'pageMash_main');
 	}
 	add_action("admin_print_scripts-$page", 'pageMash_head'); //add css styles and JS code to head
 }

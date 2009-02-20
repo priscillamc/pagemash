@@ -1,9 +1,9 @@
-=== pageMash > pageManagement ===
+=== pageMash > Page Management ===
 Contributors: JoelStarnes
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
 Requires at least: 2.1
-Tested up to: 2.7
-Stable tag: 1.2.2
+Tested up to: 2.7.1
+Stable tag: 1.3.0
 
 Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows for quick sorting, hiding and organising of page parenting structure in a simple intuative manner.
 
@@ -23,7 +23,7 @@ Feedback is greatly appreciated: http://joelstarnes.co.uk/contact
 
 pageMash works with the `wp_list_pages` function. The easiest way to use it is to put the standard WordPress pages widget in your sidebar. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.
 
-You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you're using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top levle pages). The code should look something like the following:
+You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you're using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top level pages). The code should look something like the following:
 
 `<?php wp_list_pages('title_li=<h2>Pages</h2>&depth=0'); ?>`
 
@@ -45,7 +45,7 @@ Try opening up your WP admin and browse to your pageMash page, then take a look 
 No. As of v1.0.2 you no longer need to add any code to your template. PageMash adds a filter to the wp_list_pages() function and will also work just fine with the pages widget.
 
 = Which browsers are supported =
-Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and Opera. (NB in IE7 you need to use the page name as a drag handle.)
+Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and Opera. (NB in IE you might need to use the page name as a drag handle.)
 
 == Screenshots ==
 
@@ -55,6 +55,11 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
 
 
 ==Change Log==
+= 1.3.0 =
+ - Important core fix ~ good call Alex!
+ - Pages show 'draft' and 'pending review' tags
+ - Fix for nested sorting bug in safari
+
 = 1.2.2 =
  - Additional multi-lingual support
  - Adds turkish translation ~ by Ömer Faruk [ramerta.com]
@@ -133,5 +138,6 @@ Any good up-to-date browser should work fine. I test in Firefox, IE7, Safari and
 = pageMash is available in: =
  - English
  - German :: courtesy of Tom [www.outsourcetoasia.de]
+ - Turkish :: courtesy of Ömer Faruk [ramerta.com]
 
 If you'd like to translate pageMash into your own language get in touch and I'll be happy to add it in.

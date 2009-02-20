@@ -29,7 +29,7 @@ msgid "The icon to the left of each page shows if it has child pages, <strong>do
 msgstr "Das Symbol links an jeder Seite zeigt an, ob Unterseiten vorhanden sind. Mit einem <strong>Doppel Klick</strong> k&ouml;nnen diese <strong>ein- oder ausgeklappen</strong>. Am Ende auf \"Aktualisieren\". klicken."
 
 #: pagemash.php:118
-msgid "Expand All     "
+msgid "Expand All"
 msgstr "Alle aufklappen"
 
 #: pagemash.php:118
@@ -45,7 +45,7 @@ msgid "How to Use     "
 msgstr "Anleitung"
 
 #: pagemash.php:132
-msgid "pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar 'WP admin page \\> Presentation \\> Widgets'. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.     "
+msgid "pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar [WP admin page > Appeaarance > Widgets]. Click the configure button on the widget and ensure that 'sort by' is set to 'page order'. Hey presto, you're done.     "
 msgstr "pageMash arbeitet mit der wp_list_pages Funktion. Die einfachste Methode ist, den Seiten Widget in der Sidebar zu aktivieren. [WP Admin > Darstellung > Widgets]. Klicke Konfiguration und stell sicher, dass die Sortierung auf \"Seiten Sortierung\" steht. Fertig!"
 
 #: pagemash.php:133

@@ -11,12 +11,13 @@
  >>Decodes JSON data and updates database accordingly
 */
 
-if(!$_POST['m']) die('no data'); //die if no data is sent
+
+if(!$_POST['m']) die('No data.'); //die if no data is sent
 error_reporting(E_ALL);
 require_once('myjson.php'); //JSON decode lib
   
 $root = dirname(dirname(dirname(dirname(__FILE__))));
-if (file_exists($root.'/wp-load.php')) {
+if(file_exists($root.'/wp-load.php')) {
 	require_once($root.'/wp-load.php');
 } else {
 	// Pre-2.6 compatibility
@@ -24,12 +25,14 @@ if (file_exists($root.'/wp-load.php')) {
 	require_once($root.'/wp-settings.php');
 }
 
+if(!current_user_can('edit_pages')) die("You don't have the correct priviledges.");
+
 global $wpdb, $excludePages, $wp_rewrite;
 $excludePages = array();
 
 // fetch JSON object from $_POST['m']
 $json = new Services_JSON(); 
-$aMenu = (array) $json->decode(stripslashes($_POST['m']));
+$data = (array) $json->decode(stripslashes($_POST['m']));
 
 function saveList($parent, $children) {
 	global $wpdb, $excludePages;
@@ -37,7 +40,7 @@ function saveList($parent, $children) {
 	$parent = (int) $parent;
 	$result = array();
 	$i = 1;
-	foreach ($children as $k => $v) {
+	foreach($children as $k => $v) {
 		
 		//IDs are 'JM_#' so strip first 3 characters
 		$id = (int) substr($children[$k]->id, 3); 
@@ -48,24 +51,25 @@ function saveList($parent, $children) {
 		//update pages in db
 		$postquery  = "UPDATE $wpdb->posts SET ";
 		$postquery .= "menu_order='$i', post_parent='$parent'";
-		if (isset($v->renamed)) $postquery .= ", post_title='$v->renamed'";
+		if(isset($v->renamed)) $postquery .= ", post_title='".$wpdb->escape($v->renamed)."'";
 		$postquery .= " WHERE ID='$id'"; 
 		
-		$wpdb->query($postquery); //$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = %d, post_parent = %s WHERE ID = %d" ), $i, $parent, $id );
-		echo $postquery;
-		echo "\n";
+		$wpdb->show_errors();
+		$wpdb->query($postquery);
+		echo $postquery."\n";
 		
-		if (isset($v->children[0])) {saveList($id, $v->children);}
-	$i++;
+		if(isset($v->children[0])) saveList($id, $v->children);
+		$i++;
 	}
 }
 
 $wp_rewrite->flush_rules();
 
 echo "Update Pages: \n";
-echo saveList(0, $aMenu);
+echo saveList(0, $data);
 $wpdb->print_error();
-echo "\n \nExclude Pages: \n";
+
+echo "\n\nExclude Pages: \n";
 print_r($excludePages);
 
 //update excludePages option in database

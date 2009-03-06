@@ -1,5 +1,6 @@
 === pageMash > Page Management ===
 Contributors: JoelStarnes
+Donate link: http://joelstarnes.co.uk/donate/
 Tags: order pages, ajax, re-order, drag-and-drop, admin, manage, page, pages, sidebar, header, hide,
 Requires at least: 2.1
 Tested up to: 2.7.1

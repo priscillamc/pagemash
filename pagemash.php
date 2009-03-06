@@ -132,7 +132,7 @@ function pageMash_main(){
 		<h2><?php _e('How to Use     ','pmash');?></h2>
 		<p><?php _e('pageMash works with the wp_list_pages function. The easiest way to use it is to put the pages widget in your sidebar [WP admin page > Appeaarance > Widgets]. Click the configure button on the widget and ensure that \'sort by\' is set to \'page order\'. Hey presto, you\'re done.     ','pmash');?></p>
 		<p><?php _e('You can also use the function anywhere in your theme code. e.g. in your sidebar.php file (but the code in here will not run if you\'re using any widgets) or your header.php file (somewhere under the body tag, you may want to use the depth=1 parameter to only show top level pages). The code should look something like the following:','pmash');?></p>
-		<p style="margin-bottom:0; font-weight:bold;">Code:</p>
+		<p style="margin-bottom:0; font-weight:bold;"><?php _e('Code:','pmash');?></p>
 		<code id="pageMash_code">
 			<span class="white">&lt;?php</span> <span class="blue">wp_list_pages(</span><span class="orange">'title_li=&lt;h2&gt;Pages&lt;/h2&gt;&amp;depth=0'</span><span class="blue">);</span> <span class="white">?&gt;</span>
 		</code>

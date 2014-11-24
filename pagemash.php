@@ -56,8 +56,8 @@ if ( !defined('WP_CONTENT_URL') )
 if ( !defined('WP_CONTENT_DIR') )
 	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 // Guess the location
-$pageMash_path = WP_CONTENT_DIR.'/plugins/'.plugin_basename(dirname(__FILE__));
-$pageMash_url = WP_CONTENT_URL.'/plugins/'.plugin_basename(dirname(__FILE__));
+$pageMash_path = plugin_dir_path( __FILE__ );
+$pageMash_url = plugins_url('', __FILE__ );
 
 // load localisation files
 load_plugin_textdomain('pmash','wp-content/plugins/pagemash/');

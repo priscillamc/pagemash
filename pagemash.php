@@ -4,7 +4,7 @@ Plugin Name: pageMash (patched)
 Plugin URI: http://joelstarnes.co.uk/pagemash/
 Description: Manage your multitude of pages with pageMash's slick drag-and-drop style, ajax interface. Allows quick sorting, hiding and organising of parenting.
 Author: Joel Starnes
-Version: 1.3.0
+Version: 1.3.0-0.1.1
 Author URI: http://joelstarnes.co.uk/
 	
 */
@@ -60,7 +60,7 @@ $pageMash_path = plugin_dir_path( __FILE__ );
 $pageMash_url = plugins_url('', __FILE__ );
 
 // load localisation files
-load_plugin_textdomain('pmash','wp-content/plugins/pagemash/');
+load_plugin_textdomain( 'pmash', false, dirname( plugin_basename( __FILE__ ) ) );
 
 function pageMash_getPages($post_parent){
 	//this is a recurrsive function which calls itself to produce a nested list of elements
